@@ -20,3 +20,11 @@ The platform is aimed at individuals looking for an affordable, sustainable, and
 - **Maps Integration**: Google Maps API (for location-based book exchanges)
 - -**Hosting**: Vercel(for front-end)
 - **Version Control**: GitHub
+
+## API Endpoints
+Functionality	Method	Endpoint	Description
+User Registration	POST	/auth/register	Register a new user.
+User Login	POST	/auth/login	Log in an existing user.
+Add a Book	POST	/books	Upload a new book.
+Browse Books	GET	/books	Fetch all available books.
+Request to Borrow a Book	POST	/borrow	Create a borrow request.
