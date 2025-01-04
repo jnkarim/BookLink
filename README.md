@@ -41,7 +41,7 @@ The platform is aimed at individuals looking for an affordable, sustainable, and
 | `DELETE`   | `/api/v1/admin/users/:id`        | Remove a user account.           |
 
 
-##Project Milestones
+## Project Milestones
 
 ### **Milestone 1: Project Setup**
 - Design the front-end layout for landing pages in Canva.
@@ -62,7 +62,7 @@ The platform is aimed at individuals looking for an affordable, sustainable, and
 - Deploy the web application to a hosting platform.
 - Conduct testing for performance, scalability, and security.
 
-##Demo
-Explore our live demo here: [Project Demo Link](https://www.canva.com/design/DAGbKhfc95k/EC34QSav3JdoEEESA62d_w/edit)
+## Demo
+Check out the live demonstration here: [Project Demo Link](https://www.canva.com/design/DAGbKhfc95k/EC34QSav3JdoEEESA62d_w/edit)
 
 
