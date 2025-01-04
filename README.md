@@ -20,7 +20,7 @@ The platform is aimed at individuals looking for an affordable, sustainable, and
 - **Database**: MySQL
 - **Authentication**: JWT, Laravel Passport
 - **Maps Integration**: Google Maps API (for location-based book exchanges)
-- -**Hosting**: Vercel(for front-end)
+- **Hosting**: Vercel(for front-end)
 - **Version Control**: GitHub
 
   
