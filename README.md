@@ -68,6 +68,7 @@ Check out the live demonstration here: [Project Demo Link](https://www.canva.com
 
 ## 💬 Contact
 If you have any questions or suggestions, feel free to reach out!  
-[Contact Us](jnkarim:julkernkarim.com)
+[Contact Us](mailto:jnkarim@julkernkarim.com)
+
 
 
