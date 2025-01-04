@@ -1,5 +1,13 @@
 ## **BookLink** 
 
+## 👥 Team Members
+
+| **Name**               | **Roll Number** | **Email**                         | **Role**              |
+|------------------------|-----------------|-----------------------------------|-----------------------|
+| Julker Nayeen Karim    | 20220104130     | julkernkarima@gmail.com           | Frontend, Backend     |
+| Md Nahid Hossain       | 20220104146     | nahidmax143@gmail.com             | Frontend              |
+| Md Yeas                | 20220104150     | yeashahmed23@gmail.com            | Lead                  |
+
 
 
 ## 🚀 Objective
