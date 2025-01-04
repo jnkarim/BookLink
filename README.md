@@ -21,14 +21,15 @@ The platform is aimed at individuals looking for an affordable, sustainable, and
 - -**Hosting**: Vercel(for front-end)
 - **Version Control**: GitHub
 
+  
+## API Endpoints
 
-##API Endpoints
-|Method|Endpoint|Description|
-|POST|/api/v1/auth/register|Register a new user|
-|POST|/api/v1/auth/login|User login|
-|POST|/api/v1/auth/logout|User logout|
-|GET|/api/v1/auth/profile|Fetch user profile|
-
+| **Method** | **Endpoint**             | **Description**          |
+|------------|--------------------------|--------------------------|
+| `POST`     | `/api/v1/auth/register`  | Register a new user.     |
+| `POST`     | `/api/v1/auth/login`     | User login.              |
+| `POST`     | `/api/v1/auth/logout`    | User logout.             |
+| `GET`      | `/api/v1/auth/profile`   | Fetch user profile.      |
 
 
 
