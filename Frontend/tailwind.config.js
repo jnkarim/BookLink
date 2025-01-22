@@ -15,8 +15,8 @@ export default {
     },
   },
     fontFamily:{
-      'primary': [ "Montserrat", "sans-serif" ],
-      'secondary': [ "Nunito Sans", "sans-serif"],
+      'primary': [ "Space Mono", "sans-serif" ],
+      'secondary': [ "Karla", "sans-serif"],
     },
   },
   plugins: [],

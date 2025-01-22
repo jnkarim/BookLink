@@ -5,7 +5,7 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-[#fdfcf7]">
       {/* Flex Container for Navbar and Main Content */}
       <div className="flex flex-1">
         {/* Static Sidebar Navbar */}
