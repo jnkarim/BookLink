@@ -4,19 +4,17 @@ import {
   FaUser,
   FaCompass,
   FaHome,
-  FaHighlighter,
   FaCog,
   FaSignOutAlt,
 } from "react-icons/fa";
 import { IoChatbox } from "react-icons/io5";
-import { IoMdHome } from "react-icons/io";
 
 const Navbar = () => {
   const currentUser = true; /*Check if user is logged in or not*/
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <aside className="bg-[#E7E7E4] w-72 h-full px-12 py-16 flex flex-col">
+      <aside className="bg-[#f0eee2] w-72 h-full px-12 py-16 flex flex-col">
         <h1 className="text-2xl font-semibold mb-12 font-secondary">
           BookLink
         </h1>
