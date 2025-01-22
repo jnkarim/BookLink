@@ -5,13 +5,21 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <>
-      <Navbar />
-      <main className="min-h-screen w-full px-12 py-6 font-primary">
-        <Outlet /> {/* This is where the child routes will render */}
-      </main>
+    <div className="flex flex-col min-h-screen">
+      {/* Flex Container for Navbar and Main Content */}
+      <div className="flex flex-1">
+        {/* Static Sidebar Navbar */}
+        <Navbar />
+
+        {/* Main Content Area */}
+        <main className="flex-1 p-6 font-primary">
+          <Outlet /> {/* This is where the child routes will render */}
+        </main>
+      </div>
+
+      {/* Footer */}
       <Footer />
-    </>
+    </div>
   );
 }
 
