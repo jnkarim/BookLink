@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   FaUser,
   FaCompass,
@@ -10,7 +10,14 @@ import {
 import { IoChatbox } from "react-icons/io5";
 
 const Navbar = () => {
-  const currentUser = true; /*Check if user is logged in or not*/
+  const currentUser = true; // Check if user is logged in or not
+  const location = useLocation();
+
+  // Don't show Navbar on login and signup pages
+  if (location.pathname === "/login" || location.pathname === "/register") {
+    return null;
+  }
+
   return (
     <div className="flex h-min-Sscreen">
       {/* Sidebar */}
@@ -34,7 +41,7 @@ const Navbar = () => {
             <span>Explore</span>
           </Link>
 
-          {currentUser /*Check if user is logged in or not*/ ? (
+          {currentUser /* Check if user is logged in or not */ ? (
             <>
               <Link
                 to="/chat"
@@ -58,9 +65,7 @@ const Navbar = () => {
                 <span>Settings</span>
               </Link>
             </>
-          ) : (
-            " "
-          )}
+          ) : null}
 
           <Link
             to="/login"

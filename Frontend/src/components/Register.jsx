@@ -1,11 +1,14 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { CgSpinner } from "react-icons/cg";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; 
+import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineHome } from "react-icons/ai";
 import SignupImage from "../assets/signup.png";
 
-// Password strength checker (example)
+// Password strength checker
 const checkPasswordStrength = (password) => {
-  const regex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{6,})");
+  const regex = new RegExp(
+    "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{6,})"
+  );
   return regex.test(password);
 };
 
@@ -17,8 +20,8 @@ const Signup = () => {
   const [address, setAddress] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [isAccepted, setIsAccepted] = useState(false); // Terms acceptance
-  const [passwordStrength, setPasswordStrength] = useState("");
+  const [isAccepted, setIsAccepted] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState("Weak");
 
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
@@ -36,7 +39,9 @@ const Signup = () => {
     }
 
     if (password.length < 6 || !checkPasswordStrength(password)) {
-      alert("Password must contain at least 6 characters and include uppercase, lowercase, numbers, and special characters.");
+      alert(
+        "Password must contain at least 6 characters and include uppercase, lowercase, numbers, and special characters."
+      );
       return;
     }
 
@@ -63,6 +68,14 @@ const Signup = () => {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
+      {/* Home Icon */}
+      <Link
+        to="/"
+        className="fixed top-5 left-5 bg-gray-200 p-3 rounded-full shadow-md hover:bg-gray-300 transition"
+      >
+        <AiOutlineHome className="text-2xl text-gray-600" />
+      </Link>
+
       {/* Left Section */}
       <div className="lg:w-1/2 w-full h-full flex justify-center items-center">
         <img
@@ -137,7 +150,18 @@ const Signup = () => {
 
         {/* Password Strength Indicator */}
         <div className="text-sm text-gray-500 mb-4">
-          Password strength: <span className={passwordStrength === "Strong" ? "text-green-500" : passwordStrength === "Medium" ? "text-yellow-500" : "text-red-500"}>{passwordStrength}</span>
+          Password strength:{" "}
+          <span
+            className={
+              passwordStrength === "Strong"
+                ? "text-green-500"
+                : passwordStrength === "Medium"
+                ? "text-yellow-500"
+                : "text-red-500"
+            }
+          >
+            {passwordStrength}
+          </span>
         </div>
 
         {/* Terms and Conditions Checkbox */}
@@ -149,7 +173,10 @@ const Signup = () => {
               onChange={(e) => setIsAccepted(e.target.checked)}
               className="mr-2"
             />
-            I agree to the <a href="/terms" className="text-blue-500 hover:underline">Terms and Conditions</a>
+            I agree to the{" "}
+            <a href="/terms" className="text-blue-500 hover:underline">
+              Terms and Conditions
+            </a>
           </label>
         </div>
 
@@ -170,13 +197,13 @@ const Signup = () => {
         </button>
 
         {/* Login Redirect */}
-        <a
-          href="/login"
+        <Link
+          to="/login"
           className="text-sm text-gray-600 hover:underline w-full sm:w-[300px] text-left"
         >
           Already have an account?{" "}
           <span className="font-semibold text-blue-500">Log in</span>
-        </a>
+        </Link>
       </div>
     </div>
   );

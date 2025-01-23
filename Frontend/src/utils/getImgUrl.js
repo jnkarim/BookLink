@@ -1,5 +1,5 @@
-function getImgUrl (name) {
-  return new URL(`../assets/books/${name}`, import.meta.url)
+function getImgUrl(name) {
+  return `/books/${name}`; // Path relative to the public folder
 }
 
-export {getImgUrl}
+export { getImgUrl };
