@@ -1,32 +1,25 @@
 import React from "react";
-import footerLogo from "../assets/footer-logo.png";
-
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 
 const Footer = () => {
   return (
-
-      <div className=" bg-black text-white py-10 px-4 container mx-auto flex flex-col md:flex-row justify-between items-center border-t border-gray-700 pt-6">
+    <div className="bg-[#f0eee2] text-gray-900 py-10 border-t -mx-6">
+      <div className="flex flex-col md:flex-row justify-between items-center w-full max-w-screen-xl mx-auto px-6">
         {/* Left Side - Privacy Links */}
         <ul className="flex gap-6 mb-4 md:mb-0 font-semibold">
           <li>
-            <a href="#privacy" className="hover:text-primary">
+            <a href="#privacy" className="hover:text-red-600">
               Privacy Policy
             </a>
           </li>
           <li>
-            <a href="#terms" className="hover:text-primary">
-              Terms of Service
-            </a>
-          </li>
-          <li>
-            <a href="#about" className="hover:text-primary">
+            <a href="#about" className="hover:text-red-600">
               About Us
             </a>
           </li>
           <li>
-            <a href="#contact" className="hover:text-primary">
-              Contact
+            <a href="#contact" className="hover:text-red-600">
+              Contact Us
             </a>
           </li>
         </ul>
@@ -39,7 +32,7 @@ const Footer = () => {
             rel="noopener noreferrer"
             className="hover:text-primary"
           >
-            <FaFacebook size={24} className="text-blue-500"/>
+            <FaFacebook size={24} className="text-gray-900" />
           </a>
           <a
             href="https://twitter.com"
@@ -47,7 +40,7 @@ const Footer = () => {
             rel="noopener noreferrer"
             className="hover:text-primary"
           >
-            <FaTwitter size={24} className="text-blue-500" />
+            <FaTwitter size={24} className="text-gray-900" />
           </a>
           <a
             href="https://instagram.com"
@@ -55,11 +48,12 @@ const Footer = () => {
             rel="noopener noreferrer"
             className="hover:text-primary"
           >
-            <FaInstagram size={24} className="text-blue-500" />
+            <FaInstagram size={24} className="text-gray-900" />
           </a>
         </div>
       </div>
-    );
+    </div>
+  );
 };
 
 export default Footer;

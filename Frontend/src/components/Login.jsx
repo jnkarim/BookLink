@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom"; // Import Link
 import loginImage from "../assets/login.png";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; 
+import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineHome } from "react-icons/ai";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -104,6 +105,14 @@ const Login = () => {
             Sign up
           </a>
         </p>
+
+        {/* Home Icon */}
+        <Link
+          to="/"
+          className="fixed top-5 left-5 bg-gray-200 p-3 rounded-full shadow-md hover:bg-gray-300 transition"
+        >
+          <AiOutlineHome className="text-2xl text-gray-600" />
+        </Link>
       </div>
     </div>
   );
