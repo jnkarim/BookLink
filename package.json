@@ -1,0 +1,12 @@
+{
+  "name": "booklink",
+  "version": "1.0.0",
+  "description": "| **Name**               | **Roll Number** | **Email**                         | **Role**              |\r |------------------------|-----------------|-----------------------------------|-----------------------|\r | Julker Nayeen Karim    | 20220104130     | julkernkarim@gmail.com           | Frontend, Backend     |\r | Md Nahid Hossain       | 20220104146     | nahidmax143@gmail.com             | Frontend              |\r | Md Yeas                | 20220104150     | yeashahmed23@gmail.com            | Lead                  |",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
