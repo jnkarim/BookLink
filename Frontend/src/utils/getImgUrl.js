@@ -1,9 +1,5 @@
-import React from 'react'
-
-const getImgUrl = () => {
-  return (
-    <div>getImgUrl</div>
-  )
+function getImgUrl (name) {
+  return new URL(`../assets/books/${name}`, import.meta.url)
 }
 
-export default getImgUrl
+export {getImgUrl}

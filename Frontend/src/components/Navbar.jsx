@@ -12,7 +12,7 @@ import { IoChatbox } from "react-icons/io5";
 const Navbar = () => {
   const currentUser = true; /*Check if user is logged in or not*/
   return (
-    <div className="flex h-screen">
+    <div className="flex h-min-Sscreen">
       {/* Sidebar */}
       <aside className="bg-[#f0eee2] w-72 h-full px-12 py-16 flex flex-col">
         <h1 className="text-2xl font-semibold mb-12 font-secondary">
