@@ -1,12 +1,4 @@
-import React from 'react'
-
-const Login = () => {
-  return (
-    <div>Login</div>
-  )
-}
-
-export default Loginimport React, { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import loginImage from "../assets/login.png";
