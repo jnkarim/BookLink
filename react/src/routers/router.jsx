@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router-dom";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import App from "../App.jsx";
 import Home from "../pages/home/Home.jsx";
 import Login from "../components/Login.jsx";
@@ -7,29 +6,32 @@ import Register from "../components/Register.jsx";
 import Explore from "../pages/Explore.jsx";
 import CartPage from "../pages/books/CartPage.jsx";
 import BookDetails from "../pages/BookDetails.jsx";
+import PrivacyPolicy from "../components/PrivacyPolicy.jsx"; // Import PrivacyPolicy page
+import AboutUs from "../components/AboutUs.jsx"; // Import AboutUs page
+import ContactUs from "../components/ContactUs.jsx"; // Import ContactUs page
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App/>, //parent wrapper
+    element: <App />, // parent wrapper
 
-    /*Specifies nested routes. will render inside the <App />*/
+    // Specifies nested routes that will render inside <App />
     children: [
       {
         path: "/",
-        element: <Home/>,
+        element: <Home />,
       },
       {
         path: "/explore",
-        element:<Explore/>,
+        element: <Explore />,
       },
       {
         path: "/login",
-        element: <Login/>,
+        element: <Login />,
       },
       {
         path: "/register",
-        element: <Register/>,
+        element: <Register />,
       },
       {
         path: "/book-details",
@@ -37,12 +39,13 @@ const router = createBrowserRouter([
       },
       {
         path: "/cart",
-        element: <div>Orders</div>,
+        element: <CartPage />,
       },
       {
         path: "/profile",
         element: <div>Profile Page</div>,
-      },      {
+      },
+      {
         path: "/chat",
         element: <div>Chat Page</div>,
       },
@@ -51,7 +54,19 @@ const router = createBrowserRouter([
         element: <div>Settings Page</div>,
       },
 
-
+      // Add routes for Privacy Policy, About Us, and Contact Us pages
+      {
+        path: "/privacy",
+        element: <PrivacyPolicy />,
+      },
+      {
+        path: "/about",
+        element: <AboutUs />,
+      },
+      {
+        path: "/contact",
+        element: <ContactUs />,
+      },
     ],
   },
 ]);

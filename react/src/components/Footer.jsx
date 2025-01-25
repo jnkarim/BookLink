@@ -1,5 +1,9 @@
 import React from "react";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import PrivacyPolicy from "./PrivacyPolicy"; // Import Privacy Policy component
+import AboutUs from "./AboutUs"; // Import About Us component
+import ContactUs from "./ContactUs"; // Import Contact Us component
 
 const Footer = () => {
   return (
@@ -8,19 +12,19 @@ const Footer = () => {
         {/* Left Side - Privacy Links */}
         <ul className="flex gap-6 mb-4 md:mb-0 font-semibold">
           <li>
-            <a href="#privacy" className="hover:text-red-600">
+            <Link to="/privacy" className="hover:text-red-600">
               Privacy Policy
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#about" className="hover:text-red-600">
+            <Link to="/about" className="hover:text-red-600">
               About Us
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#contact" className="hover:text-red-600">
+            <Link to="/contact" className="hover:text-red-600">
               Contact Us
-            </a>
+            </Link>
           </li>
         </ul>
 
