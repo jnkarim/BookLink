@@ -1,9 +1,5 @@
-import React from 'react'
-
-const getImgUrl = () => {
-  return (
-    <div>getImgUrl</div>
-  )
+function getImgUrl(name) {
+  return `/books/${name}`; // Path relative to the public folder
 }
 
-export default getImgUrl
+export { getImgUrl };
