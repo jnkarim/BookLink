@@ -22,23 +22,25 @@ const Navbar = () => {
   }
 
   return (
-    <div className="flex h-min-Sscreen">
+    <div className="flex h-min-screen">
       {/* Sidebar */}
       <aside className="bg-[#f0eee2] w-72 h-full px-12 py-16 flex flex-col">
-        <h1 className="text-2xl font-semibold mb-12 font-secondary">
+        <h1 className="text-2xl font-semibold mb-12 text-tertiary" >
           BookLink
         </h1>
         <nav className="flex flex-col gap-6">
           <Link
             to="/"
-            className="hover:text-red-600 flex items-center gap-3 font-secondary"
+            className="hover:text-red-600 flex items-center gap-3"
+            style={{ fontFamily: "var(--font-secondary)" }}
           >
             <FaHome size={20} />
             <span>For You</span>
           </Link>
           <Link
             to="/explore"
-            className="hover:text-red-600 flex items-center gap-3 font-secondary"
+            className="hover:text-red-600 flex items-center gap-3"
+            style={{ fontFamily: "var(--font-secondary)" }}
           >
             <FaCompass size={20} />
             <span>Explore</span>
@@ -48,21 +50,24 @@ const Navbar = () => {
             <>
               <Link
                 to="/chat"
-                className="hover:text-red-600 flex items-center gap-3 font-secondary"
+                className="hover:text-red-600 flex items-center gap-3"
+                style={{ fontFamily: "var(--font-secondary)" }}
               >
                 <IoChatbox size={20} />
                 <span>Chat</span>
               </Link>
               <Link
                 to="/profile"
-                className="hover:text-red-600 flex items-center gap-3 font-secondary"
+                className="hover:text-red-600 flex items-center gap-3"
+                style={{ fontFamily: "var(--font-secondary)" }}
               >
                 <FaUser size={20} />
                 <span>Profile</span>
               </Link>
               <Link
                 to="/settings"
-                className="hover:text-red-600 flex items-center gap-3 font-secondary"
+                className="hover:text-red-600 flex items-center gap-3"
+                style={{ fontFamily: "var(--font-secondary)" }}
               >
                 <FaCog size={20} />
                 <span>Settings</span>
@@ -70,7 +75,8 @@ const Navbar = () => {
               {/* Log Out button */}
               <button
                 onClick={handleLogout}
-                className="hover:text-red-600 flex items-center gap-3 font-secondary"
+                className="hover:text-red-600 flex items-center gap-3"
+                style={{ fontFamily: "var(--font-secondary)" }}
               >
                 <FaSignOutAlt size={20} />
                 <span>Log Out</span>
@@ -80,6 +86,7 @@ const Navbar = () => {
             <Link
               to="/login"
               className="hover:text-red-600 flex items-center gap-3"
+              style={{ fontFamily: "var(--font-secondary)" }}
             >
               <FaSignOutAlt size={20} />
               <span>Log In</span>

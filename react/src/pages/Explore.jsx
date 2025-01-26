@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const Explore = () => {
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All"); // Track selected category
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1); // Track current page
+  const booksPerPage = 6; // Number of books per page
+  const [searchQuery, setSearchQuery] = useState(""); // Search query state
 
   // Fetch book data from books.json
   useEffect(() => {
@@ -30,18 +33,29 @@ const Explore = () => {
     return <div>Loading...</div>;
   }
 
-  // Filter books based on selected category
-  const filteredBooks =
-    selectedCategory === "All"
-      ? books
-      : books.filter((book) => book.category === selectedCategory);
+  // Filter books based on selected category and search query
+  const filteredBooks = books
+    .filter((book) => 
+      selectedCategory === "All" || book.category === selectedCategory
+    )
+    .filter((book) => 
+      book.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+  // Calculate the books to display based on the current page
+  const indexOfLastBook = currentPage * booksPerPage;
+  const indexOfFirstBook = indexOfLastBook - booksPerPage;
+  const currentBooks = filteredBooks.slice(indexOfFirstBook, indexOfLastBook);
+
+  // Handle pagination
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div>
       {/* Categories Section */}
       <section>
-        <h2 className="section-header mb-8 mt-16 text-2xl font-primary">Categories</h2>
-        <div className="flex gap-x-4 gap-y-2 items-center flex-wrap ">
+        <h2 className="section-header mb-8 mt-16 text-2xl font-primary font-semibold">Categories</h2>
+        <div className="flex gap-x-4 gap-y-2 items-center flex-wrap font-semibold">
           {categories.map((category, index) => (
             <button
               key={index}
@@ -58,15 +72,26 @@ const Explore = () => {
         </div>
       </section>
 
+      {/* Search Bar Section (Positioned in the top-right corner) */}
+      <section className="absolute top-16 right-8 z-10">
+        <input
+          type="text"
+          placeholder="Search books..."
+          className="w-45 p-2 border border-gray-700 rounded-md"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)} // Update search query
+        />
+      </section>
+
       {/* Books Section */}
       <section>
-        <h2 className="section-header mb-8 mt-16">
+        <h2 className="section-header mb-8 mt-16 font-semibold">
           {selectedCategory === "All"
             ? "All Books"
             : `${selectedCategory} Books`}
         </h2>
         <div className="grid grid-cols-3 gap-4">
-          {filteredBooks.map((book) => (
+          {currentBooks.map((book) => (
             <div
               key={book._id}
               className={`border p-4 rounded my-8 flex flex-col items-center ${
@@ -92,6 +117,26 @@ const Explore = () => {
               </Link>
             </div>
           ))}
+        </div>
+
+        {/* Pagination Controls */}
+        <div className="flex justify-center gap-4 mt-8">
+          {currentPage > 1 && (
+            <button
+              onClick={() => paginate(currentPage - 1)}
+              className="px-6 py-2 text-white rounded-md bg-gray-900 hover:bg-gray-300"
+            >
+              Prev
+            </button>
+          )}
+          {currentPage < Math.ceil(filteredBooks.length / booksPerPage) && (
+            <button
+              onClick={() => paginate(currentPage + 1)}
+              className="px-6 py-2 text-white rounded-md bg-gray-900 hover:bg-gray-300"
+            >
+              Next
+            </button>
+          )}
         </div>
       </section>
     </div>
