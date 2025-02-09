@@ -1,231 +1,143 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineHome, AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { ClipLoader } from "react-spinners"; // Spinner component
+import { ClipLoader } from "react-spinners";
 import SignupImage from "../assets/signup.png";
 
 const Signup = () => {
-  const [userName, setUserName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
-  const [userPhone, setUserPhone] = useState("");
-  const [userAddress, setUserAddress] = useState("");
-  const [userPassword, setUserPassword] = useState("");
+  const [formData, setFormData] = useState({
+    userName: "",
+    userEmail: "",
+    userPhone: "",
+    userAddress: "",
+    userPassword: "",
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [isAccepted, setIsAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [acceptError, setAcceptError] = useState("");
-
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  const validateEmail = (email) => {
-    const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    return re.test(email);
-  };
+  const validateEmail = email => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(email);
+  const validatePassword = password => password.length >= 6;
 
-  const validatePassword = (password) => password.length >= 6;
+  const handleChange = (e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handleSignup = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    const { userName, userEmail, userPassword } = formData;
 
-    // Input validations
-    if (!userName.trim()) {
-      alert("Name is required.");
+    let validationErrors = {};
+
+    if (!userName.trim()) validationErrors.userName = "Name is required.";
+    if (!validateEmail(userEmail)) validationErrors.userEmail = "Invalid email.";
+    if (!validatePassword(userPassword)) validationErrors.userPassword = "Password must be at least 6 characters.";
+    if (!isAccepted) validationErrors.accept = "You must accept the terms.";
+
+    if (Object.keys(validationErrors).length) {
+      setErrors(validationErrors);
       setLoading(false);
       return;
     }
-
-    if (!validateEmail(userEmail)) {
-      setEmailError("Please enter a valid email.");
-      setLoading(false);
-      return;
-    } else {
-      setEmailError("");
-    }
-
-    if (!validatePassword(userPassword)) {
-      setPasswordError("Password must be at least 6 characters.");
-      setLoading(false);
-      return;
-    } else {
-      setPasswordError("");
-    }
-
-    if (!isAccepted) {
-      setAcceptError("You must accept the terms and conditions.");
-      setLoading(false);
-      return;
-    } else {
-      setAcceptError("");
-    }
-
-    // Create user object
-    const user = {
-      name: userName,
-      email: userEmail,
-      phone: userPhone,
-      address: userAddress,
-      password: userPassword,
-    };
 
     try {
       const response = await fetch("http://127.0.0.1:8000/api/registeruser", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(user),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
-
       const data = await response.json();
-      setLoading(false);
-
       if (data.token) {
-        alert(data.message);
         localStorage.setItem("authToken", data.token);
-        window.location.replace("/profile"); // Redirect to the profile page
+        navigate("/profile");
       } else {
-        alert("Registration failed. Please try again.");
+        alert("Registration failed.");
       }
     } catch (error) {
+      alert("Error. Please try again.");
+    } finally {
       setLoading(false);
-      alert("An error occurred. Please try again later.");
-      console.error(error);
     }
   };
 
   return (
     <div className="flex flex-col lg:flex-row h-screen bg-gray-50">
-      {/* Home Icon */}
-      <Link
-        to="/"
-        className="fixed top-5 left-5 bg-gray-200 p-3 rounded-full shadow-md hover:bg-gray-300 transition"
-      >
+      <Link to="/" className="fixed top-5 left-5 bg-gray-200 p-3 rounded-full shadow-md">
         <AiOutlineHome className="text-2xl text-gray-600" />
       </Link>
-
-      {/* Left Section */}
-      <div className="lg:w-1/2 w-full h-full flex justify-center items-center p-4">
-        <img
-          src={SignupImage}
-          alt="Signup Illustration"
-          className="w-4/5 sm:w-3/4 lg:w-3/5 xl:w-2/3 h-auto object-contain"
-        />
+      <div className="lg:w-1/2 w-full flex justify-center items-center p-4">
+        <img src={SignupImage} alt="Signup" className="w-4/5 object-contain" />
       </div>
-
-      {/* Right Section */}
       <div className="lg:w-1/2 w-full flex flex-col justify-center items-center p-8">
-        <h3 className="text-center text-4xl font-semibold text-gray-900 mb-8">
-          Sign up
-        </h3>
-
-        {/* Name Input */}
+        <h3 className="text-4xl font-semibold text-gray-900 mb-8">Sign up</h3>
         <input
+          name="userName"
           type="text"
           placeholder="Full Name"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          className="w-full sm:w-[350px] px-4 py-3 mb-6 border rounded-md focus:outline-none focus:ring-2 border-gray-300 focus:ring-gray-900 transition duration-300"
+          value={formData.userName}
+          onChange={handleChange}
+          className="w-full sm:w-[350px] px-4 py-3 mb-6 border rounded-md"
         />
-
-        {/* Email Input */}
         <input
+          name="userEmail"
           type="email"
           placeholder="Email"
-          value={userEmail}
-          onChange={(e) => setUserEmail(e.target.value)}
-          className={`w-full sm:w-[350px] px-4 py-3 mb-6 border rounded-md focus:outline-none focus:ring-2 ${
-            emailError
-              ? "border-red-500 focus:ring-red-500"
-              : "border-gray-300 focus:ring-gray-900"
-          } transition duration-300`}
+          value={formData.userEmail}
+          onChange={handleChange}
+          className={`w-full sm:w-[350px] px-4 py-3 mb-6 border rounded-md ${errors.userEmail && "border-red-500"}`}
         />
-        {emailError && <p className="text-red-500 text-xs mt-1">{emailError}</p>}
-
-        {/* Phone Input */}
+        {errors.userEmail && <p className="text-red-500">{errors.userEmail}</p>}
         <input
+          name="userPhone"
           type="tel"
           placeholder="Phone Number"
-          value={userPhone}
-          onChange={(e) => setUserPhone(e.target.value)}
-          className="w-full sm:w-[350px] px-4 py-3 mb-6 border rounded-md focus:outline-none focus:ring-2 border-gray-300 focus:ring-gray-900 transition duration-300"
+          value={formData.userPhone}
+          onChange={handleChange}
+          className="w-full sm:w-[350px] px-4 py-3 mb-6 border rounded-md"
         />
-
-        {/* Address Input */}
         <input
+          name="userAddress"
           type="text"
           placeholder="Address"
-          value={userAddress}
-          onChange={(e) => setUserAddress(e.target.value)}
-          className="w-full sm:w-[350px] px-4 py-3 mb-6 border rounded-md focus:outline-none focus:ring-2 border-gray-300 focus:ring-gray-900 transition duration-300"
+          value={formData.userAddress}
+          onChange={handleChange}
+          className="w-full sm:w-[350px] px-4 py-3 mb-6 border rounded-md"
         />
-
-        {/* Password Input */}
         <div className="relative w-full sm:w-[350px] mb-6">
           <input
+            name="userPassword"
             type={showPassword ? "text" : "password"}
-            placeholder="Password (at least 6 characters)"
-            value={userPassword}
-            onChange={(e) => setUserPassword(e.target.value)}
-            className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 ${
-              passwordError
-                ? "border-red-500 focus:ring-red-500"
-                : "border-gray-300 focus:ring-gray-900"
-            } transition duration-300`}
+            placeholder="Password"
+            value={formData.userPassword}
+            onChange={handleChange}
+            className={`w-full px-4 py-3 border rounded-md ${errors.userPassword && "border-red-500"}`}
           />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-2 text-gray-600"
-          >
-            {showPassword ? (
-              <AiOutlineEyeInvisible className="text-lg" />
-            ) : (
-              <AiOutlineEye className="text-lg" />
-            )}
+          <button onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-2">
+            {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
           </button>
         </div>
-        {passwordError && (
-          <p className="text-red-500 text-xs mt-1">{passwordError}</p>
-        )}
-
-        {/* Terms and Conditions */}
+        {errors.userPassword && <p className="text-red-500">{errors.userPassword}</p>}
         <div className="mb-6 w-full sm:w-[350px] text-sm">
-          <label className="flex items-center">
+          <label>
             <input
               type="checkbox"
               checked={isAccepted}
               onChange={() => setIsAccepted(!isAccepted)}
               className="mr-2"
             />
-            I accept the terms and conditions.
+            I accept the terms.
           </label>
-          {acceptError && (
-            <p className="text-red-500 text-xs mt-1">{acceptError}</p>
-          )}
+          {errors.accept && <p className="text-red-500">{errors.accept}</p>}
         </div>
-
-        {/* Signup Button */}
         <button
-          onClick={handleSignup}
-          className={`w-full sm:w-[350px] py-3 mb-6 bg-gray-900 text-white text-base rounded-md hover:bg-black transition ${
-            loading && "cursor-not-allowed"
-          }`}
+          onClick={handleSubmit}
           disabled={loading}
+          className="w-full sm:w-[350px] py-3 mb-6 bg-gray-900 text-white rounded-md"
         >
           {loading ? <ClipLoader size={20} color="#ffffff" /> : "Sign up"}
         </button>
-       {/* Login Redirect */}
-       <Link
-          to="/login"
-          className="text-sm text-gray-600 hover:underline w-full sm:w-[300px] text-left"
-        >
-          Already have an account?{" "}
-          <span className="font-semibold text-gray-900">Log in</span>
-        </Link>
+        <Link to="/login" className="text-sm text-gray-600">Already have an account? Log in</Link>
       </div>
     </div>
   );
