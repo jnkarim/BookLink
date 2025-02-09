@@ -55,7 +55,10 @@ const Login = () => {
       if (response.data.token) {
         localStorage.setItem("authToken", response.data.token);
         alert(response.data.message);
-        navigate("/");
+
+        // Use window.location.replace to reload smoothly and keep the app's current state
+        window.location.replace("/"); // This reloads the page and goes to the home route
+
       } else {
         alert("TRY AGAIN!");
       }
@@ -66,12 +69,13 @@ const Login = () => {
     }
   };
 
+  // Function to toggle password visibility
   const handlePasswordToggle = () => {
-    setShowPassword(!showPassword);
+    setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen">
+    <div className="flex flex-col lg:flex-row h-screen bg-gray-50">
       <div className="lg:w-1/2 w-full h-full flex justify-center items-center p-4">
         <img
           src={loginImage}
@@ -80,40 +84,40 @@ const Login = () => {
         />
       </div>
 
-      <div className="lg:w-1/2 w-full flex flex-col justify-center items-center p-4 sm:p-6 md:p-8">
-        <h3 className="text-center text-4xl font-semibold mb-8 sm:mb-12">
+      <div className="lg:w-1/2 w-full flex flex-col justify-center items-center p-8">
+        <h3 className="text-center text-secondary text-4xl font-semibold text-gray-900 mb-8 sm:mb-12">
           Log in
         </h3>
 
-        <div className="w-full sm:w-[300px] mb-6">
+        <div className="w-full sm:w-[350px] mb-6">
           <input
             type="text"
             placeholder="Email"
             value={userEmail}
             onChange={(e) => setUserEmail(e.target.value)}
-            className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${
+            className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 ${
               emailError
                 ? "border-red-500 focus:ring-red-500"
-                : "border-gray-300 focus:ring-blue-400"
-            }`}
+                : "border-gray-300 focus:ring-gray-900"
+            } transition duration-300`}
           />
           {emailError && (
             <p className="text-red-500 text-xs mt-1">{emailError}</p>
           )}
         </div>
 
-        <div className="w-full sm:w-[300px] mb-6">
+        <div className="w-full sm:w-[350px] mb-6">
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
               value={userPassword}
               onChange={(e) => setUserPassword(e.target.value)}
-              className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${
+              className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 ${
                 passwordError
                   ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-blue-400"
-              }`}
+                  : "border-gray-300 focus:ring-gray-900"
+              } transition duration-300`}
             />
             <button
               type="button"
@@ -136,7 +140,7 @@ const Login = () => {
         {/* Login Button */}
         <button
           onClick={handleLogin}
-          className={`w-full sm:w-[300px] py-2.5 mb-6 bg-blue-500 text-white text-base rounded hover:bg-blue-600 transition ${
+          className={`w-full sm:w-[350px] py-3 mb-6 bg-gray-900 text-white text-base rounded-md hover:bg-black transition ${
             loading && "cursor-not-allowed"
           }`}
           disabled={loading}
@@ -144,25 +148,25 @@ const Login = () => {
           {loading ? (
             <ClipLoader size={20} color="#ffffff" />
           ) : (
-            <>Log in</>
+            "Log in"
           )}
         </button>
 
         {/* Links */}
-        <p className="w-full sm:w-[300px] text-sm mb-1 text-gray-600 text-left">
+        <p className="w-full sm:w-[350px] text-sm mb-1 text-gray-600 text-left">
           Don't have an account?{" "}
-          <a
-            href="/register"
-            className="font-semibold text-blue-500 hover:underline"
+          <Link
+            to="/register"
+            className="font-semibold text-gray-900 hover:underline"
           >
             Sign up
-          </a>
+          </Link>
         </p>
 
         {/* Home Icon */}
         <Link
           to="/"
-          className="fixed top-5 left-5 bg-gray-200 p-3 rounded-full shadow-md hover:bg-gray-300 transition"
+          className="fixed top-5 left-5 bg-white p-3 rounded-full shadow-md hover:bg-gray-100 transition"
         >
           <AiOutlineHome className="text-2xl text-gray-600" />
         </Link>
