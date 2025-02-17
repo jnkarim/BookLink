@@ -102,29 +102,18 @@ public function logout(Request $request)
 
 public function update(Request $request)
 {
-    $user = auth()->user();
-    $validatedData = $request->validate([
+    $user = $request->user();
+
+    $request->validate([
         'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-        'password' => 'nullable|string|min:8',
-        'address' => 'nullable|string|max:255', // Add address validation
-        
+        'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+        'bio' => 'nullable|string|max:500',
     ]);
 
-    $user->name = $validatedData['name'];
-    $user->email = $validatedData['email'];
-    $user->address = $validatedData['address'];
+    $user->update($request->only('name', 'email', 'bio'));
 
-    if ($request->has('password') && $request->password) {
-        $user->password = bcrypt($request->password);
-    }
-
-
-    $user->save();
-
-    return response()->json($user);
+    return response()->json(['message' => 'Profile updated successfully', 'user' => $user]);
 }
-
 
 
     
