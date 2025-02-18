@@ -1,9 +1,0 @@
-@import "tailwindcss";
-
-@theme {
-    --color-mint-500: oklch(0.72 0.11 178);
-
-    --font-primary: ["Space Mono", "sans-serif"];
-    --font-secondary: ["Karla", "sans-serif"];
-    --font-tertiary: ["Playfair Display", "serif"]; /* Beautiful serif font */
-}
