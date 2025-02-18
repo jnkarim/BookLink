@@ -11,6 +11,7 @@ import AboutUs from "../components/AboutUs.jsx"; // Import AboutUs page
 import ContactUs from "../components/ContactUs.jsx"; // Import ContactUs page
 import Settings from "../pages/Settings.jsx";
 import Profile from "../pages/Profile.jsx";
+import BookUpload from "../pages/BookUpload.jsx";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: "/settings",
         element: <Settings/>,
+      },
+      {
+        path: "/upload-book",
+        element: <BookUpload />,
       },
 
       // Add routes for Privacy Policy, About Us, and Contact Us pages
