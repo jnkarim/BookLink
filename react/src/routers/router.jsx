@@ -9,6 +9,9 @@ import BookDetails from "../pages/BookDetails.jsx";
 import PrivacyPolicy from "../components/PrivacyPolicy.jsx"; // Import PrivacyPolicy page
 import AboutUs from "../components/AboutUs.jsx"; // Import AboutUs page
 import ContactUs from "../components/ContactUs.jsx"; // Import ContactUs page
+import Settings from "../pages/Settings.jsx";
+import Profile from "../pages/Profile.jsx";
+import BookUpload from "../pages/BookUpload.jsx";
 
 const router = createBrowserRouter([
   {
@@ -43,7 +46,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <div>Profile Page</div>,
+        element: <Profile/>,
       },
       {
         path: "/chat",
@@ -51,7 +54,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/settings",
-        element: <div>Settings Page</div>,
+        element: <Settings/>,
       },
 
       // Add routes for Privacy Policy, About Us, and Contact Us pages
@@ -66,6 +69,10 @@ const router = createBrowserRouter([
       {
         path: "/contact",
         element: <ContactUs />,
+      },
+      {
+        path: "/upload-book",
+        element: <BookUpload />,
       },
     ],
   },
