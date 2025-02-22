@@ -7,9 +7,6 @@ import {
     FaLinkedin,
     FaTwitter,
     FaFacebook,
-    FaBook,
-    FaStar,
-    FaChartLine,
 } from "react-icons/fa";
 
 const Profile = () => {
@@ -49,7 +46,7 @@ const Profile = () => {
         );
 
     return (
-        <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
             {/* Page Header */}
             <div className="max-w-6xl mx-auto">
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">Profile</h1>
@@ -63,7 +60,9 @@ const Profile = () => {
                         <div className="bg-white rounded-xl shadow-lg p-6">
                             <div className="flex flex-col items-center">
                                 <img
-                                    src={user?.profile_picture || "https://via.placeholder.com/150"}
+                                    src={user?.profile_picture 
+                                        ? `http://127.0.0.1:8000/storage/${user.profile_picture}`
+                                        : "https://via.placeholder.com/150"}
                                     alt=""
                                     className="w-40 h-40 rounded-full object-cover border-4 border-gray-900 shadow-lg"
                                 />
@@ -148,71 +147,52 @@ const Profile = () => {
                             </p>
                         </div>
 
-                        {/* Statistics Section */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                            <div className="bg-white rounded-xl shadow-lg p-6 flex items-center">
-                                <FaBook className="text-sky-500 mr-4" size={32} />
-                                <div>
-                                    <p className="text-gray-600">Books Uploaded</p>
-                                    <p className="text-2xl font-bold text-gray-900">
-                                        {user?.booksUploaded || 0}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="bg-white rounded-xl shadow-lg p-6 flex items-center">
-                                <FaStar className="text-sky-500 mr-4" size={32} />
-                                <div>
-                                    <p className="text-gray-600">Reviews Written</p>
-                                    <p className="text-2xl font-bold text-gray-900">
-                                        {user?.reviewsWritten || 0}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="bg-white rounded-xl shadow-lg p-6 flex items-center">
-                                <FaChartLine className="text-sky-500 mr-4" size={32} />
-                                <div>
-                                    <p className="text-gray-600">Profile Views</p>
-                                    <p className="text-2xl font-bold text-gray-900">
-                                        {user?.profileViews || "0K"}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Recent Activity Section */}
-                        <div className="bg-white rounded-xl shadow-lg p-6">
+                        {/* Books Section */}
+                        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
                             <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                                Recent Activity
+                                My Books
                             </h2>
-                            <div className="space-y-4">
-                                <div className="flex items-center">
-                                    <div className="bg-gray-100 p-3 rounded-full">
-                                        <FaBook className="text-sky-500" size={20} />
-                                    </div>
-                                    <div className="ml-4">
-                                        <p className="text-gray-900">
-                                            Uploaded a new book:{" "}
-                                            <span className="font-semibold">
-                                                "The Great Gatsby"
-                                            </span>
-                                        </p>
-                                        <p className="text-sm text-gray-500">2 hours ago</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center">
-                                    <div className="bg-gray-100 p-3 rounded-full">
-                                        <FaStar className="text-sky-500" size={20} />
-                                    </div>
-                                    <div className="ml-4">
-                                        <p className="text-gray-900">
-                                            Reviewed:{" "}
-                                            <span className="font-semibold">
-                                                "To Kill a Mockingbird"
-                                            </span>
-                                        </p>
-                                        <p className="text-sm text-gray-500">1 day ago</p>
-                                    </div>
-                                </div>
+
+                            {/* Book Count Box */}
+                            <div className="bg-gray-100 p-4 rounded-xl shadow-md mb-6 flex items-center justify-between">
+                                <span className="text-lg font-medium text-gray-700">
+                                    <strong>{user?.books?.length || 0}</strong> Books Added
+                                </span>
+                                <Link
+                                    to="/upload-book"
+                                    className="bg-sky-500 hover:bg-sky-600 text-white py-2 px-4 rounded-lg flex items-center"
+                                >
+                                    <FaUpload className="mr-2" />
+                                    Upload New Book
+                                </Link>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {user?.books && user.books.length > 0 ? (
+                                    user.books.map((book) => (
+                                        <div
+                                            key={book.id}
+                                            className="bg-gray-100 rounded-xl shadow-md p-4"
+                                        >
+                                            <img
+                                                src={book.cover_image}
+                                                alt={book.title}
+                                                className="w-full h-40 object-cover rounded-lg"
+                                            />
+                                            <h3 className="mt-4 text-xl font-semibold text-gray-900">
+                                                {book.title}
+                                            </h3>
+                                            <p className="text-sm text-gray-600">
+                                                {book.author}
+                                            </p>
+                                            <p className="mt-2 text-gray-700">
+                                                {book.description}
+                                            </p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="text-gray-500">No books uploaded yet.</p>
+                                )}
                             </div>
                         </div>
                     </div>
