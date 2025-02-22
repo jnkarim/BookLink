@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -99,6 +99,22 @@ public function logout(Request $request)
         'message' => 'No authenticated user found!'
     ], 401);
 }
+
+public function update(Request $request)
+{
+    $user = $request->user();
+
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+        'bio' => 'nullable|string|max:500',
+    ]);
+
+    $user->update($request->only('name', 'email', 'bio'));
+
+    return response()->json(['message' => 'Profile updated successfully', 'user' => $user]);
+}
+
 
     
 
