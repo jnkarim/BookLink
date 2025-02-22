@@ -1,124 +1,149 @@
-import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
-import { PiStarFill } from "react-icons/pi";
+import { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import { PiStarFill } from "react-icons/pi"; // Import the PiStarFill icon
 
 const BookDetails = () => {
-  const { bookId } = useParams();
+  const { id } = useParams(); // Get the book id from the URL
   const [book, setBook] = useState(null);
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [allBooks, setAllBooks] = useState([]); // To store all books
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null); // For error handling
 
-  // Simulated book data
-  const mockBookData = {
-    id: "12345",
-    title: "Sample Book",
-    authors: [{ id: "1", name: "Author One" }],
-    image: "https://via.placeholder.com/150",
-    rating: 4.5,
-    intro: "This is a brief introduction to the book.",
-    genres: [{ id: "1", name: "Fantasy" }, { id: "2", name: "Adventure" }],
-    desc: "Detailed description of the book.",
-  };
-
+  // Fetch all books from /books.json
   useEffect(() => {
-    // Simulating fetching book data from a server
-    if (bookId === mockBookData.id) {
-      setBook(mockBookData);
+    const fetchBooks = async () => {
+      try {
+        const response = await fetch("/books.json");
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+
+        const data = await response.json();
+        setAllBooks(data); // Set all books data
+      } catch (error) {
+        setError("Error fetching book data.");
+        console.error("Error fetching book data:", error);
+      }
+    };
+
+    fetchBooks();
+  }, []); // Run only once on component mount
+
+  // Fetch book details based on the id
+  useEffect(() => {
+    const fetchBookDetails = async () => {
+      try {
+        const foundBook = allBooks.find((book) => book._id === Number(id));
+
+        if (foundBook) {
+          setBook(foundBook); // Set the book data
+        } else {
+          setError("Book not found."); // Display error message if no book found
+        }
+      } catch (error) {
+        setError("Error fetching book details.");
+        console.error("Error fetching book details:", error);
+      } finally {
+        setLoading(false); // Set loading to false once fetch is done
+      }
+    };
+
+    if (allBooks.length > 0) {
+      fetchBookDetails(); // Fetch the current book details once all books are available
     }
-  }, [bookId]);
+  }, [id, allBooks]); // Run whenever `id` or `allBooks` changes
 
-  const handleBookMark = () => {
-    setIsBookmarked(!isBookmarked);
-  };
-
-  if (!book) {
-    return <div>Loading...</div>;
+  if (loading) {
+    return <div className="text-center text-lg font-semibold text-gray-600">Loading...</div>;
   }
 
+  if (error) {
+    return <div className="text-center text-lg font-semibold text-red-500">{error}</div>; // Handle error state
+  }
+
+  // Get recommendations: books with the same category
+  const recommendedBooks = allBooks.filter(
+    (b) => b.category === book.category && b._id !== book._id
+  );
+
   return (
-    <div>
-      <div className="flex gap-x-16 ml-12 relative">
-        <div className="absolute right-0 top-0 gap-y-4 flex flex-col items-end">
-          <Link
-            to={`/book/${bookId}/content?type=byte`}
-            className="flex gap-x-2 transition duration-300 items-center primary-btn py-1.5 w-36 justify-center text-sm"
-          >
-            <p>Byte</p>
-          </Link>
-          <Link
-            to={`/book/${bookId}/content?type=chapter`}
-            className="flex gap-x-2 transition duration-300 items-center secondary-btn py-1.5 text-sm w-36 justify-center"
-          >
-            <p>Full Book</p>
-          </Link>
-        </div>
-      </div>
-
-      <div className="flex gap-x-16 ml-12">
-        <div className="w-1/5 rounded-xl shadow-xl z-10">
-          <div
-            className="pb-[133%] rounded-xl bg2"
-            style={{
-              backgroundImage: `url(${book.image})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-            }}
-          ></div>
+    <div className="max-w-screen-lg mx-auto p-6">
+      <div className="flex gap-x-12 mb-8">
+        {/* Book Image */}
+        <div className="w-1/3 bg-gray-200 rounded-lg shadow-xl">
+          <img
+            src={`/books/${book.coverImage}`}
+            alt={book.title}
+            className="w-full h-full object-cover rounded-lg shadow-lg"
+          />
         </div>
 
-        <div className="w-1/2">
-          <h3 className="font-semibold text-4xl mb-2 flex items-start gap-x-6 relative">
-            {book.title}
-          </h3>
-          <p className="text-lg content2 h-16 overflow-hidden">
-            By{" "}
-            {book.authors.map(({ id, name }) => (
-              <span key={id} className="mr-2">
-                {name}
-              </span>
-            ))}
-          </p>
+        {/* Book Information */}
+        <div className="w-2/3 space-y-6">
+          {/* Book Title */}
+          <h2 className="text-4xl font-semibold text-gray-800 tracking-tight">{book.title}</h2>
 
-          <div className="flex gap-x-4 mt-2">
-            <div className="flex gap-x-2 items-center text-amber-500">
-              <PiStarFill size={18} />
-              <p className="">
-                {book?.rating > 0 ? book?.rating.toFixed(2) : "No rating"}
-              </p>
-            </div>
+          {/* Author Section */}
+          <div className="flex items-center space-x-2 text-gray-900">
+            <span className="text-lg">By</span>
+            <span className="font-semibold text-gray-1200">{book.author}</span> {/* Displaying author */}
           </div>
 
-          <p className="content2 my-4 w-3/4">{book.intro}</p>
+          {/* Rating Section */}
+          <div className="flex gap-x-6 mt-4 items-center text-amber-500">
+            <span className="flex items-center text-xl">
+              <PiStarFill className="w-5 h-5" />
+              <span className="ml-1">{book?.rating > 0 ? book?.rating.toFixed(2) : "No rating"}</span>
+            </span>
+          </div>
+
+          {/* Description Section */}
+          <div className="mt-4">
+            <p className="text-lg text-gray-800 leading-relaxed">{book.description}</p>
+          </div>
+
+          {/* Category and Price Section */}
+          <div className="flex gap-x-8 mt-6">
+            <p className="text-lg text-gray-700">Category: <span className="font-semibold">{book.category}</span></p>
+            <p className="text-lg font-semibold text-gray-900">Price: <span className="text-2xl text-green-600">${book.newPrice}</span></p>
+          </div>
         </div>
       </div>
-
-      <div className="bg-pure w-full -mt-24 rounded-xl border-2 border-bkg-2">
-        <div className="mt-6 mr-8 flex gap-4">
-          <div className="flex-1"></div>
-          <button onClick={handleBookMark} className="bg2 rounded-full p-4">
-            {isBookmarked ? <IoBookmark /> : <IoBookmarkOutline />}
-          </button>
-        </div>
-
-        <div className="flex gap-x-16 mt-16 mx-12 mb-12">
-          <div className="w-3/5">
-            <p className="font-semibold text-lg mb-4">Genres</p>
-            <div className="flex flex-wrap items-center mb-12 gap-2">
-              {book.genres.map(({ id, name }) => (
-                <Link
-                  key={id}
-                  to={`/reader/genre/${id}`}
-                  className="px-4 py-1.5 border border-check rounded-full"
-                >
-                  {name}
-                </Link>
-              ))}
-            </div>
-
-            <p className="font-semibold text-lg mb-4">Description</p>
-            <p className="text-justify">{book.desc}</p>
-          </div>
+      {/* Recommendations Section */}
+      <div className="mt-40"> {/* Increased margin-top for larger gap */}
+        <h3 className="text-2xl font-semibold text-gray-800 mb-6">Recommendations</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {recommendedBooks.length > 0 ? (
+            recommendedBooks.map((recBook) => (
+              <Link to={`/book/${recBook._id}`} key={recBook._id}>
+                <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-full h-36 flex justify-center items-center bg-gray-200">
+                    <img
+                      src={`/books/${recBook.coverImage}`}
+                      alt={recBook.title}
+                      className="h-full object-contain"
+                    />
+                  </div>
+                  <div className="p-2">
+                    <h4 className="text-sm font-semibold text-gray-800 truncate">
+                      {recBook.title}
+                    </h4>
+                    <div className="mt-2">
+                      <Link
+                        to={`/book/${recBook._id}`}
+                        className="text-gray-500 font-bold mt-2 hover:text-red-600"
+                      >
+                        View Details
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <p className="text-lg text-gray-600">No recommendations available.</p>
+          )}
         </div>
       </div>
     </div>
