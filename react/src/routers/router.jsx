@@ -13,6 +13,14 @@ import Settings from "../pages/Settings.jsx";
 import Profile from "../pages/Profile.jsx";
 import BookUpload from "../pages/BookUpload.jsx";
 
+
+import AdminDashboard from "../admin/Dashboard.jsx";
+import PendingBooks from "../admin/PendingBooks.jsx";
+import PendingRequests from "../admin/ExchangeRecords.jsx";
+import ExchangeRecords from "../admin/PendingRequests.jsx";
+import AdminLayout from "../admin/AdminLayout.jsx";
+import Sidebar from "../admin/Sidebar.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -46,7 +54,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <Profile/>,
+        element: <Profile />,
       },
       {
         path: "/chat",
@@ -54,7 +62,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/settings",
-        element: <Settings/>,
+        element: <Settings />,
       },
 
       // Add routes for Privacy Policy, About Us, and Contact Us pages
@@ -74,6 +82,36 @@ const router = createBrowserRouter([
         path: "/upload-book",
         element: <BookUpload />,
       },
+      // Admin Routes
+
+      {
+        path: "/admin",
+        element: <AdminLayout />,
+        children: [
+          {
+            path: "",
+            element: <AdminDashboard />,
+          },
+          {
+            path: "pending-books",
+            element: <PendingBooks />,
+          },
+          {
+            path: "Sidebar",
+            element: <Sidebar />,
+          },
+          {
+            path: "pending-requests",
+            element: <PendingRequests />,
+          },
+          {
+            path: "exchange-records",
+            element: <ExchangeRecords />,
+          },
+        ],
+      },
+
+
     ],
   },
 ]);
