@@ -28,6 +28,8 @@ class Book extends Model
         'cover_image',
         'status',
         'user_id',
+        'language',
+        'condition',
     ];
 
     /**

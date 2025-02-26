@@ -25,6 +25,7 @@ class User extends Authenticatable
         'bio',
         'address',
         'profile_picture',
+        'role',
     ];
 
 
@@ -55,4 +56,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Book::class);
     }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
 }
