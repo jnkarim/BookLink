@@ -22,6 +22,11 @@ class User extends Authenticatable
         'email',
         'password',
         'address',
+<<<<<<< HEAD
+=======
+        'profile_picture',
+        'role',
+>>>>>>> 6bc2dd6 (admin portion is fixed)
     ];
 
     /**
@@ -42,4 +47,21 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+<<<<<<< HEAD
+=======
+
+    /**
+     * Get the books for the user.
+     */
+    public function books()
+    {
+        return $this->hasMany(Book::class);
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+>>>>>>> 6bc2dd6 (admin portion is fixed)
 }

@@ -1,26 +1,25 @@
-
-import React, { useState } from 'react';
-import { Outlet, Navigate } from 'react-router-dom';
+import React from 'react';
+import { Outlet, Navigate, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
 function AdminLayout() {
-  const [isAuthenticated, setIsAuthenticated] = useState(true); // For preview purposes, set to true
-  const [activeTab, setActiveTab] = useState('dashboard');
+  // Get admin authentication status from localStorage
+  const isAuthenticated = localStorage.getItem('adminToken');
+  const navigate = useNavigate();  // Hook for navigation
 
-  // For preview purposes, we'll skip the authentication check
-  // In production, you would check if the admin is actually logged in
   if (!isAuthenticated) {
     return <Navigate to="/admin/login" />;
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-[#fdfcf7]">
       <Sidebar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onLogout={() => setIsAuthenticated(false)}
+        onLogout={() => {
+          localStorage.removeItem('adminToken'); // Remove admin token on logout
+          navigate('/admin/login');  // Use navigate to redirect to login page
+        }}
       />
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 p-6 overflow-auto">
         <Outlet />
       </main>
     </div>
