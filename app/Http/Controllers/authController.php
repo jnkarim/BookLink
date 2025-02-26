@@ -8,6 +8,7 @@ use Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 use App\Services\PostService;
 
@@ -37,7 +38,8 @@ class authController extends Controller
                 'email' => $request->email,
                 'phone' => $request->phone,
                 'address' => $request->address,
-                'password' => Hash::make($request->password)  // Use Hash::make() for better clarity
+                'password' => Hash::make($request->password),  // Use Hash::make() for better clarity
+                'role' => 'user'  // Default role set as "user"
             ]);
 
             return response()->json([
@@ -70,8 +72,10 @@ class authController extends Controller
                 return response()->json([
                     'status' => 'true',
                     'message' => 'USER LOGIN SUCCESSFULLY!',
+                    'role' => $user->role,  // Return user role
                     'token' => $user->createToken('login_token')->plainTextToken
                 ]);
+
             } else {
                 return response()->json([
                     'status' => 'false',
@@ -123,11 +127,31 @@ class authController extends Controller
 
     public function getUserData(Request $request)
     {
-        $user = $request->user(); // Get the authenticated user
-        $user->load('books'); // Eager load the books relationship
+        $user = $request->user();
 
-        return response()->json($user); // Return user data as JSON
+        // If user is admin, return all users
+        if ($user->role === 'admin') {
+            $users = User::with('books')->get();
+            return response()->json($users);
+        }
+
+        // Else, return only the authenticated user's data
+        $user->load('books');
+        return response()->json($user);
     }
+
+
+    public function countUsers()
+    {
+        // Count the total number of users in the 'users' table
+        $totalUsers = User::count();
+
+        return response()->json([
+            'status' => 'true',
+            'total_users' => $totalUsers
+        ]);
+    }
+
 
     public function updateProfilePicture(Request $request)
     {
@@ -137,14 +161,17 @@ class authController extends Controller
 
         $user = auth()->user();
 
-        if ($request->hasFile('profile_picture')) {
-            // Store the image in public/uploads folder
-            $imagePath = $request->file('profile_picture')->store('uploads', 'public');
-
-            // Save the image path in the database
-            $user->profile_picture = $imagePath;
-            $user->save();
+        // Delete old image if exists
+        if ($user->profile_picture) {
+            Storage::disk('public')->delete($user->profile_picture);
         }
+
+        // Store the new image
+        $imagePath = $request->file('profile_picture')->store('uploads', 'public');
+
+        // Update user profile picture
+        $user->profile_picture = $imagePath;
+        $user->save();
 
         return response()->json(['message' => 'Profile picture updated successfully', 'profile_picture' => $user->profile_picture]);
     }
