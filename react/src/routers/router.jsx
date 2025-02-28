@@ -12,13 +12,14 @@ import ContactUs from "../components/ContactUs.jsx";
 import Settings from "../pages/Settings.jsx";
 import Profile from "../pages/Profile.jsx";
 import BookUpload from "../pages/BookUpload.jsx";
+import Chat from "../pages/Chat.jsx";
 
 import AdminDashboard from "../admin/Dashboard.jsx";
 import PendingBooks from "../admin/PendingBooks.jsx";
 import PendingRequests from "../admin/PendingRequests.jsx";
 import ExchangeRecords from "../admin/ExchangeRecords.jsx";
 import AdminLayout from "../admin/AdminLayout.jsx";
-import AdminLogin from "../admin/AdminLogin.jsx";  // Import Admin Login Component
+import AdminLogin from "../admin/AdminLogin.jsx";
 
 const router = createBrowserRouter([
   {
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
       { path: "/book-details", element: <BookDetails /> },
       { path: "/cart", element: <CartPage /> },
       { path: "/profile", element: <Profile /> },
-      { path: "/chat", element: <div>Chat Page</div> },
+      { path: "/chat", element: <Chat /> },
       { path: "/settings", element: <Settings /> },
       { path: "/privacy", element: <PrivacyPolicy /> },
       { path: "/about", element: <AboutUs /> },
@@ -50,7 +51,7 @@ const router = createBrowserRouter([
           { path: "exchange-records", element: <ExchangeRecords /> },
         ],
       },
-      { path: "/admin/login", element: <AdminLogin /> },  // Admin Login Route
+      { path: "/admin/login", element: <AdminLogin /> }, // Admin Login Route
     ],
   },
 ]);
