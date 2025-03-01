@@ -1,149 +1,108 @@
-import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { PiStarFill } from "react-icons/pi"; // Import the PiStarFill icon
+import React from 'react';
+import { Star, ChevronDown, ArrowRight } from 'lucide-react';
 
 const BookDetails = () => {
-  const { id } = useParams(); // Get the book id from the URL
-  const [book, setBook] = useState(null);
-  const [allBooks, setAllBooks] = useState([]); // To store all books
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // For error handling
-
-  // Fetch all books from /books.json
-  useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const response = await fetch("/books.json");
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-
-        const data = await response.json();
-        setAllBooks(data); // Set all books data
-      } catch (error) {
-        setError("Error fetching book data.");
-        console.error("Error fetching book data:", error);
-      }
-    };
-
-    fetchBooks();
-  }, []); // Run only once on component mount
-
-  // Fetch book details based on the id
-  useEffect(() => {
-    const fetchBookDetails = async () => {
-      try {
-        const foundBook = allBooks.find((book) => book._id === Number(id));
-
-        if (foundBook) {
-          setBook(foundBook); // Set the book data
-        } else {
-          setError("Book not found."); // Display error message if no book found
-        }
-      } catch (error) {
-        setError("Error fetching book details.");
-        console.error("Error fetching book details:", error);
-      } finally {
-        setLoading(false); // Set loading to false once fetch is done
-      }
-    };
-
-    if (allBooks.length > 0) {
-      fetchBookDetails(); // Fetch the current book details once all books are available
-    }
-  }, [id, allBooks]); // Run whenever `id` or `allBooks` changes
-
-  if (loading) {
-    return <div className="text-center text-lg font-semibold text-gray-600">Loading...</div>;
-  }
-
-  if (error) {
-    return <div className="text-center text-lg font-semibold text-red-500">{error}</div>; // Handle error state
-  }
-
-  // Get recommendations: books with the same category
-  const recommendedBooks = allBooks.filter(
-    (b) => b.category === book.category && b._id !== book._id
-  );
-
   return (
-    <div className="max-w-screen-lg mx-auto p-6">
-      <div className="flex gap-x-12 mb-8">
-        {/* Book Image */}
-        <div className="w-1/3 bg-gray-200 rounded-lg shadow-xl">
-          <img
-            src={`/books/${book.coverImage}`}
-            alt={book.title}
-            className="w-full h-full object-cover rounded-lg shadow-lg"
+    <div className="max-w-7xl mx-auto p-4 bg-white">
+      {/* Header with search and profile */}
+      <div className="flex justify-between items-center mb-8">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="eg. Harry Potter"
+            className="pl-10 pr-4 py-2 border rounded-full w-64 focus:outline-none"
           />
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
         </div>
-
-        {/* Book Information */}
-        <div className="w-2/3 space-y-6">
-          {/* Book Title */}
-          <h2 className="text-4xl font-semibold text-gray-800 tracking-tight">{book.title}</h2>
-
-          {/* Author Section */}
-          <div className="flex items-center space-x-2 text-gray-900">
-            <span className="text-lg">By</span>
-            <span className="font-semibold text-gray-1200">{book.author}</span> {/* Displaying author */}
+        <div className="flex items-center gap-4">
+          <div className="flex gap-4">
+            <button className="flex items-center px-6 py-2 bg-gray-900 text-white rounded-full">
+              Byte <ArrowRight className="ml-2 w-4 h-4" />
+            </button>
+            <button className="flex items-center px-6 py-2 border border-gray-300 rounded-full">
+              Full Book <ArrowRight className="ml-2 w-4 h-4" />
+            </button>
           </div>
-
-          {/* Rating Section */}
-          <div className="flex gap-x-6 mt-4 items-center text-amber-500">
-            <span className="flex items-center text-xl">
-              <PiStarFill className="w-5 h-5" />
-              <span className="ml-1">{book?.rating > 0 ? book?.rating.toFixed(2) : "No rating"}</span>
-            </span>
-          </div>
-
-          {/* Description Section */}
-          <div className="mt-4">
-            <p className="text-lg text-gray-800 leading-relaxed">{book.description}</p>
-          </div>
-
-          {/* Category and Price Section */}
-          <div className="flex gap-x-8 mt-6">
-            <p className="text-lg text-gray-700">Category: <span className="font-semibold">{book.category}</span></p>
-            <p className="text-lg font-semibold text-gray-900">Price: <span className="text-2xl text-green-600">${book.newPrice}</span></p>
+          <button className="p-2 rounded-full">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+          </button>
+          <div className="w-10 h-10 rounded-full bg-yellow-500 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" alt="Profile" className="w-full h-full object-cover" />
           </div>
         </div>
       </div>
-      {/* Recommendations Section */}
-      <div className="mt-40"> {/* Increased margin-top for larger gap */}
-        <h3 className="text-2xl font-semibold text-gray-800 mb-6">Recommendations</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {recommendedBooks.length > 0 ? (
-            recommendedBooks.map((recBook) => (
-              <Link to={`/book/${recBook._id}`} key={recBook._id}>
-                <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                  <div className="w-full h-36 flex justify-center items-center bg-gray-200">
-                    <img
-                      src={`/books/${recBook.coverImage}`}
-                      alt={recBook.title}
-                      className="h-full object-contain"
-                    />
-                  </div>
-                  <div className="p-2">
-                    <h4 className="text-sm font-semibold text-gray-800 truncate">
-                      {recBook.title}
-                    </h4>
-                    <div className="mt-2">
-                      <Link
-                        to={`/book/${recBook._id}`}
-                        className="text-gray-500 font-bold mt-2 hover:text-red-600"
-                      >
-                        View Details
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))
-          ) : (
-            <p className="text-lg text-gray-600">No recommendations available.</p>
-          )}
+
+      {/* Book content */}
+      <div className="flex flex-col md:flex-row gap-8">
+        {/* Book cover */}
+        <div className="flex-shrink-0 w-full md:w-64">
+          <img 
+            src="https://images.unsplash.com/photo-1600189261867-30e5ffe7b8da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
+            alt="Harry Potter and the Chamber of Secrets" 
+            className="w-full rounded-lg shadow-lg border-4 border-white"
+          />
+        </div>
+
+        {/* Book details */}
+        <div className="flex-grow">
+          <h1 className="text-4xl font-bold mb-1">Harry Potter 2</h1>
+          <p className="text-gray-600 mb-6">By J K Rowling</p>
+
+          <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center">
+              <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+              <span className="ml-1 font-medium">3.50</span>
+            </div>
+            <button className="flex items-center px-4 py-2 border rounded-full">
+              No Shelf <ChevronDown className="ml-2 w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="mb-8">
+            <h2 className="text-xl font-bold mb-4">Genres</h2>
+            <div className="flex flex-wrap gap-2">
+              <span className="px-4 py-2 border rounded-full">Fantasy</span>
+            </div>
+          </div>
+
+          <div className="mb-8">
+            <h2 className="text-xl font-bold mb-4">Description</h2>
+            <p className="text-gray-700">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab veniam magni facilis commodi nobis, deserunt
+              recusandae. Architecto harum nobis placeat quaerat corrupti voluptatibus exercitationem officiis impedit
+              at, aut tenetur modi corporis consectetur illum blanditiis possimus quod quisquam optio quo sunt libero
+              eius doloremque asperiores sit. Sed ipsum aspernatur voluptates suscipit vel illo, fugiat asperiores totam
+              deserunt, aliquam adipisci rem eius sequi. Sint possimus obcaecati accusamus autem quo molestiae
+              maiores soluta veritatis alias, laborum sequi asperiores distinctio numquam magni, earum exercitationem
+              nisi natus a! Esse fugit eius repellat minima, commodi fuga dolorem explicabo provident ex, eveniet.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="text-xl font-bold mb-4">About the Author</h2>
+            <div className="flex items-start gap-4">
+              <div className="w-16 h-16 rounded-full overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" 
+                  alt="J K Rowling" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <h3 className="font-bold">J K Rowling</h3>
+                <p className="text-sm text-gray-600 mb-2">
+                  Joanne Rowling CH OBE FRSL (/ ˈroʊlɪŋ/; "rolling";[1] born 31 July 1965), better k...
+                </p>
+                <button className="px-4 py-1 border rounded-full text-sm">View</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
