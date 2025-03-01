@@ -8,7 +8,7 @@ function AdminLayout() {
   const navigate = useNavigate();  // Hook for navigation
 
   if (!isAuthenticated) {
-    return <Navigate to="/admin/login" />;
+    return <Navigate to="/admin" />;
   }
 
   return (
@@ -16,7 +16,7 @@ function AdminLayout() {
       <Sidebar
         onLogout={() => {
           localStorage.removeItem('adminToken'); // Remove admin token on logout
-          navigate('/admin/login');  // Use navigate to redirect to login page
+          navigate('/admin');  // Use navigate to redirect to login page
         }}
       />
       <main className="flex-1 p-6 overflow-auto">

@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "../App.jsx";
 import Home from "../pages/home/Home.jsx";
 import Login from "../components/Login.jsx";
@@ -18,7 +18,12 @@ import PendingBooks from "../admin/PendingBooks.jsx";
 import PendingRequests from "../admin/PendingRequests.jsx";
 import ExchangeRecords from "../admin/ExchangeRecords.jsx";
 import AdminLayout from "../admin/AdminLayout.jsx";
-import AdminLogin from "../admin/AdminLogin.jsx";  // Import Admin Login Component
+import AdminLogin from "../admin/AdminLogin.jsx"; // Admin Login Component
+import Chat from "../pages/Chat.jsx";
+import { User } from "lucide-react";
+
+// Function to check if admin is authenticated (Example)
+const isAdminAuthenticated = !!localStorage.getItem("adminToken"); // Replace with real auth logic
 
 const router = createBrowserRouter([
   {
@@ -29,30 +34,39 @@ const router = createBrowserRouter([
       { path: "/explore", element: <Explore /> },
       { path: "/login", element: <Login /> },
       { path: "/register", element: <Register /> },
-      { path: "/book-details", element: <BookDetails /> },
+      { path: "/book/:id", element: <BookDetails /> },  // Fix the path to be consistent with Profile link
       { path: "/cart", element: <CartPage /> },
+      { path: "/user/:id", element: <User /> },
       { path: "/profile", element: <Profile /> },
-      { path: "/chat", element: <div>Chat Page</div> },
+      { path: "/chat", element: <Chat/> },
       { path: "/settings", element: <Settings /> },
       { path: "/privacy", element: <PrivacyPolicy /> },
       { path: "/about", element: <AboutUs /> },
       { path: "/contact", element: <ContactUs /> },
       { path: "/upload-book", element: <BookUpload /> },
-
-      // Admin Routes
-      {
-        path: "/admin",
-        element: <AdminLayout />,
-        children: [
-          { index: true, element: <AdminDashboard /> },
-          { path: "pending-books", element: <PendingBooks /> },
-          { path: "pending-requests", element: <PendingRequests /> },
-          { path: "exchange-records", element: <ExchangeRecords /> },
-        ],
-      },
-      { path: "/admin/login", element: <AdminLogin /> },  // Admin Login Route
     ],
   },
+
+  // Redirect "/admin" based on authentication
+  { path: "/admin", element: <Navigate to={isAdminAuthenticated ? "/admin/dashboard" : "/admin/login"} replace /> },
+
+  // Admin Login Page
+  { path: "/admin/login", element: <AdminLogin /> },
+
+  // Protected Admin Routes (Require AdminLayout)
+  {
+    path: "/admin",
+    element: <AdminLayout />,
+    children: [
+      { path: "dashboard", element: <AdminDashboard /> },
+      { path: "pending-books", element: <PendingBooks /> },
+      { path: "pending-requests", element: <PendingRequests /> },
+      { path: "exchange-records", element: <ExchangeRecords /> },
+    ],
+  },
+
+  // Fallback route if no other match is found
+  { path: "*", element: <Navigate to="/" /> },
 ]);
 
 export default router;

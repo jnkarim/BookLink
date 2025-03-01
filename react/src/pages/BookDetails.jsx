@@ -1,153 +1,113 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { PiStarFill } from "react-icons/pi"; // Import the PiStarFill icon
+import { Star, ChevronDown, ArrowRight } from "lucide-react";
 
 const BookDetails = () => {
-  const { id } = useParams(); // Get the book id from the URL
-  const [book, setBook] = useState(null);
-  const [allBooks, setAllBooks] = useState([]); // To store all books
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // For error handling
+    const { id } = useParams(); // Get the book ID from the URL
+    const [book, setBook] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-  // Fetch all books from /books.json
-  useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const response = await fetch("/books.json");
+    // Fetch book details when the component mounts
+    useEffect(() => {
+        const fetchBookDetails = async () => {
+            try {
+                const token = localStorage.getItem("authToken"); // Get the token from storage
+                const response = await fetch(
+                    `http://127.0.0.1:8000/api/books/${id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
+                if (!response.ok) {
+                    throw new Error("Failed to fetch book details");
+                }
 
-        const data = await response.json();
-        setAllBooks(data); // Set all books data
-      } catch (error) {
-        setError("Error fetching book data.");
-        console.error("Error fetching book data:", error);
-      }
-    };
+                const data = await response.json();
+                setBook(data); // Set the state with the fetched book details
+            } catch (error) {
+                setError(error.message); // Handle any errors
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    fetchBooks();
-  }, []); // Run only once on component mount
+        fetchBookDetails();
+    }, [id]); // Re-run if the `id` in the URL changes
 
-  // Fetch book details based on the id
-  useEffect(() => {
-    const fetchBookDetails = async () => {
-      try {
-        const foundBook = allBooks.find((book) => book._id === Number(id));
-
-        if (foundBook) {
-          setBook(foundBook); // Set the book data
-        } else {
-          setError("Book not found."); // Display error message if no book found
-        }
-      } catch (error) {
-        setError("Error fetching book details.");
-        console.error("Error fetching book details:", error);
-      } finally {
-        setLoading(false); // Set loading to false once fetch is done
-      }
-    };
-
-    if (allBooks.length > 0) {
-      fetchBookDetails(); // Fetch the current book details once all books are available
+    // Show loading spinner or error message
+    if (loading) {
+        return <p>Loading book details...</p>;
     }
-  }, [id, allBooks]); // Run whenever `id` or `allBooks` changes
 
-  if (loading) {
-    return <div className="text-center text-lg font-semibold text-gray-600">Loading...</div>;
-  }
+    if (error) {
+        return <p className="text-red-500">{error}</p>;
+    }
 
-  if (error) {
-    return <div className="text-center text-lg font-semibold text-red-500">{error}</div>; // Handle error state
-  }
+    // Show book details once data is fetched
+    if (!book) {
+        return <p className="text-red-500">Book not found.</p>;
+    }
 
-  // Get recommendations: books with the same category
-  const recommendedBooks = allBooks.filter(
-    (b) => b.category === book.category && b._id !== book._id
-  );
-
-  return (
-    <div className="max-w-screen-lg mx-auto p-6">
-      <div className="flex gap-x-12 mb-8">
-        {/* Book Image */}
-        <div className="w-1/3 bg-gray-200 rounded-lg shadow-xl">
-          <img
-            src={`/books/${book.coverImage}`}
-            alt={book.title}
-            className="w-full h-full object-cover rounded-lg shadow-lg"
-          />
-        </div>
-
-        {/* Book Information */}
-        <div className="w-2/3 space-y-6">
-          {/* Book Title */}
-          <h2 className="text-4xl font-semibold text-gray-800 tracking-tight">{book.title}</h2>
-
-          {/* Author Section */}
-          <div className="flex items-center space-x-2 text-gray-900">
-            <span className="text-lg">By</span>
-            <span className="font-semibold text-gray-1200">{book.author}</span> {/* Displaying author */}
-          </div>
-
-          {/* Rating Section */}
-          <div className="flex gap-x-6 mt-4 items-center text-amber-500">
-            <span className="flex items-center text-xl">
-              <PiStarFill className="w-5 h-5" />
-              <span className="ml-1">{book?.rating > 0 ? book?.rating.toFixed(2) : "No rating"}</span>
-            </span>
-          </div>
-
-          {/* Description Section */}
-          <div className="mt-4">
-            <p className="text-lg text-gray-800 leading-relaxed">{book.description}</p>
-          </div>
-
-          {/* Category and Price Section */}
-          <div className="flex gap-x-8 mt-6">
-            <p className="text-lg text-gray-700">Category: <span className="font-semibold">{book.category}</span></p>
-            <p className="text-lg font-semibold text-gray-900">Price: <span className="text-2xl text-green-600">${book.newPrice}</span></p>
-          </div>
-        </div>
-      </div>
-      {/* Recommendations Section */}
-      <div className="mt-40"> {/* Increased margin-top for larger gap */}
-        <h3 className="text-2xl font-semibold text-gray-800 mb-6">Recommendations</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {recommendedBooks.length > 0 ? (
-            recommendedBooks.map((recBook) => (
-              <Link to={`/book/${recBook._id}`} key={recBook._id}>
-                <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                  <div className="w-full h-36 flex justify-center items-center bg-gray-200">
+    return (
+        <div className="min-h-screen">
+            <div className="flex flex-row">
+                {/* Book cover */}
+                <div className="w-72 h-auto bg-[#f0eee2] rounded-xl flex items-center justify-center shadow-sm relative mx-32 ">
                     <img
-                      src={`/books/${recBook.coverImage}`}
-                      alt={recBook.title}
-                      className="h-full object-contain"
+                        src={
+                            book.cover_image
+                                ? `http://127.0.0.1:8000/storage/${book.cover_image}`
+                                : "https://via.placeholder.com/150"
+                        }
+                        alt={book.title}
+                        className="object-cover rounded-lg w-full h-full"
                     />
-                  </div>
-                  <div className="p-2">
-                    <h4 className="text-sm font-semibold text-gray-800 truncate">
-                      {recBook.title}
-                    </h4>
-                    <div className="mt-2">
-                      <Link
-                        to={`/book/${recBook._id}`}
-                        className="text-gray-500 font-bold mt-2 hover:text-red-600"
-                      >
-                        View Details
-                      </Link>
-                    </div>
-                  </div>
                 </div>
-              </Link>
-            ))
-          ) : (
-            <p className="text-lg text-gray-600">No recommendations available.</p>
-          )}
+
+                {/* Book details */}
+                <div className="flex justify-between w-full">
+                    <div className="w-1/2">
+                        <h3 className="font-bold text-gray-900 text-4xl p-3 -mx-24">
+                            {book.title}
+                        </h3>
+                        <p className="w-full text-2xl text-gray-500 px-4 -mx-24">
+                            By {book.author}
+                        </p>
+                        <p className="w-fit text-lg font-semibold rounded-full text-gray-700 border border-black -mx-20 px-4 py-2 my-4">
+                            {book.status}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex flex-col gap-12">
+                <div className="max-w-[1050px] w-full h-auto mx-auto bg-[#f8f9fa] border border-gray-200 rounded-xl px-16 py-24 shadow-lg -my-18">
+                    <h2 className="text-xl font-bold mb-4">Genres</h2>
+                    <p className="w-fit text-lg font-semibold rounded-2xl text-black border border-black px-4 py-2 my-4">
+                        {book.genre}
+                    </p>
+
+                    <div className="mb-8">
+                        <h2 className="text-xl font-bold mb-4">Description</h2>
+                        <p className="text-gray-700">{book.description}</p>
+                    </div>
+                    {/* Contact with the book owner link */}
+                    <div className="mt-8">
+                        <Link
+                            to={`/user/${book.owner_id}`} // Link to User page with owner_id as a parameter
+                            className="text-red-500 hover:underline font-semibold"
+                        >
+                            Contact with the book owner
+                        </Link>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default BookDetails;
