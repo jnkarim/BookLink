@@ -30,6 +30,7 @@ class Book extends Model
         'user_id',
         'language',
         'condition',
+        'genre',
     ];
 
     /**

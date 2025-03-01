@@ -1,138 +1,120 @@
 import React, { useState, useEffect } from "react";
-import { BookOpen, Users, RefreshCw, Clock, Hourglass } from 'lucide-react';
 import axios from "axios";
-
-const StatCard = ({ title, value, icon: Icon, color }) => (
-  <div className="bg-white p-6 rounded-lg shadow-md">
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="text-gray-500 text-sm">{title}</p>
-        <p className="text-2xl font-bold mt-1">{value}</p>
-      </div>
-      <div className={`p-3 rounded-full ${color}`}>
-        <Icon className="w-6 h-6 text-white" />
-      </div>
-    </div>
-  </div>
-);
+import { BookOpen, RefreshCw } from "lucide-react";
 
 const Dashboard = () => {
-  const [stats, setStats] = useState({
-    total_books: 0,
-    active_users: 0,
-    books_exchanged: 0,
-    pending_returns: 0,
-    pending_books: 0, // New state for books with pending status
-  });
-  const [recentActivities, setRecentActivities] = useState([]);
+    const [books, setBooks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await axios.get('http://127.0.0.1:8000/api/stats');
-        setStats(response.data);
-      } catch (error) {
-        console.error("Error fetching stats:", error);
-      }
-    };
+    useEffect(() => {
+        const fetchBooks = async () => {
+            try {
+                const token = localStorage.getItem("authToken");
+                if (!token) {
+                    console.log("Authentication token not found");
+                    return;
+                }
 
-    const fetchRecentActivities = async () => {
-      try {
-        const response = await axios.get('http://127.0.0.1:8000/api/recent-activities');
-        setRecentActivities(response.data);
-      } catch (error) {
-        console.error("Error fetching recent activities:", error);
-      }
-    };
+                const response = await axios.get("http://127.0.0.1:8000/api/books", {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
 
-const fetchPendingBooks = async () => {
-  try {
-    const response = await axios.get('http://127.0.0.1:8000/api/books');
-    
-    console.log("API Response:", response.data); // Debugging
+                setBooks(response.data);
+            } catch (error) {
+                console.error("Error fetching books:", error.response || error.message);
+                setError("Failed to fetch books");
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    if (Array.isArray(response.data)) {
-      const pendingBooks = response.data.filter(book => book.available_status === "Pending");
-      
-      console.log("Filtered Pending Books:", pendingBooks); // Debugging
+        fetchBooks();
+    }, []);
 
-      setStats(prevStats => ({ ...prevStats, pending_books: pendingBooks.length }));
-    } else {
-      console.error("Error: Expected an array but got:", response.data);
-    }
-  } catch (error) {
-    console.error("Error fetching pending books:", error);
-  }
-};
+    const availableBooks = books.filter((book) => book.status === "available").length;
+    const pendingBooks = books.filter((book) => book.status === "pending").length;
 
-    fetchStats();
-    fetchRecentActivities();
-    fetchPendingBooks();
-  }, []);
+    if (loading) return <div className="text-center text-lg font-semibold">Loading...</div>;
+    if (error) return <div className="text-center text-red-500 font-semibold">{error}</div>;
 
-  return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-6">Dashboard Overview</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard
-          title="Total Books"
-          value={stats.total_books}
-          icon={BookOpen}
-          color="bg-blue-500"
-        />
-        <StatCard
-          title="Active Users"
-          value={stats.active_users}
-          icon={Users}
-          color="bg-green-500"
-        />
-        <StatCard
-          title="Books Exchanged"
-          value={stats.books_exchanged}
-          icon={RefreshCw}
-          color="bg-purple-500"
-        />
-        <StatCard
-          title="Pending Returns"
-          value={stats.pending_returns}
-          icon={Clock}
-          color="bg-yellow-500"
-        />
-        <StatCard
-          title="Pending Books"
-          value={stats.pending_books}
-          icon={Hourglass}
-          color="bg-red-500"
-        />
-      </div>
+    return (
+        <div className="p-8 bg-gray-50 min-h-screen">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Admin Dashboard</h2>
 
-      <div className="mt-8">
-        <h3 className="text-xl font-semibold mb-4">Recent Activities</h3>
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <table className="min-w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Book</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {recentActivities.map((activity, index) => (
-                <tr key={index}>
-                  <td className="px-6 py-4">{activity.action}</td>
-                  <td className="px-6 py-4">{activity.bookTitle}</td>
-                  <td className="px-6 py-4">{activity.userName}</td>
-                  <td className="px-6 py-4">{activity.date}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            {/* Dashboard Statistics */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-8">
+                <div className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4">
+                    <BookOpen className="w-10 h-10 text-green-500" />
+                    <span className="text-lg font-medium text-gray-700">
+                        <strong>{availableBooks}</strong> Books Available
+                    </span>
+                </div>
+
+                <div className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4">
+                    <BookOpen className="w-10 h-10 text-yellow-500" />
+                    <span className="text-lg font-medium text-gray-700">
+                        <strong>{pendingBooks}</strong> Pending Books
+                    </span>
+                </div>
+
+                <div className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4">
+                    <RefreshCw className="w-10 h-10 text-blue-500" />
+                    <span className="text-lg font-medium text-gray-700">
+                        <strong>{pendingBooks}</strong> Pending Requests
+                    </span>
+                </div>
+            </div>
+
+            {/* Books Table */}
+            <div className="max-w-6xl mx-auto bg-white p-6 rounded-xl shadow-md">
+                <h3 className="text-2xl font-semibold text-gray-800 mb-4">Book List</h3>
+
+                <div className="overflow-x-auto">
+                    <table className="w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr className="bg-gray-200">
+                                <th className="border border-gray-300 px-4 py-2">ID</th>
+                                <th className="border border-gray-300 px-4 py-2">Title</th>
+                                <th className="border border-gray-300 px-4 py-2">Author</th>
+                                <th className="border border-gray-300 px-4 py-2">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {books.length > 0 ? (
+                                books.map((book) => (
+                                    <tr key={book.id} className="text-center">
+                                        <td className="border border-gray-300 px-4 py-2">{book.id}</td>
+                                        <td className="border border-gray-300 px-4 py-2">{book.title}</td>
+                                        <td className="border border-gray-300 px-4 py-2">{book.author || "N/A"}</td>
+                                        <td className="border border-gray-300 px-4 py-2">
+                                            <span
+                                                className={`px-3 py-1 text-sm font-semibold rounded-full ${
+                                                    book.status === "available"
+                                                        ? "bg-green-200 text-green-700"
+                                                        : book.status === "pending"
+                                                        ? "bg-yellow-200 text-yellow-700"
+                                                        : "bg-red-200 text-red-700"
+                                                }`}
+                                            >
+                                                {book.status}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="4" className="border border-gray-300 px-4 py-2 text-center text-gray-500">
+                                        No books available
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Dashboard;

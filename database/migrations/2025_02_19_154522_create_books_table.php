@@ -12,13 +12,15 @@ return new class extends Migration {
             $table->string('title');
             $table->string('author');
             $table->text('description')->nullable();
-            $table->string('cover_image'); // Store image path
-            $table->enum('status', ['pending', 'available', 'borrowed', 'exchanging', 'given'])->default('pending');
+            $table->string('cover_image');
+            $table->enum('status', ['pending', 'available']);
+            $table->string('language');
+            $table->enum('condition', ['new', 'old']);
+            $table->string('genre');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->enum('language', ['English', 'Bangla'])->default('English');
-            $table->enum('condition', ['new', 'old'])->default('new'); // Instead of 'status'
-            $table->timestamps(); // Keep timestamps at the end
+            $table->timestamps();
         });
+        
     }
 
     public function down() {

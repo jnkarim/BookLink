@@ -70,7 +70,7 @@ const Chat = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen">
       {/* Left Sidebar - Contacts */}
       <div
         className={`w-full sm:w-1/3 border-r border-gray-300 bg-white flex flex-col transition-transform transform ${
@@ -78,7 +78,7 @@ const Chat = () => {
         }`}
       >
         {/* Header */}
-        <div className="p-3 bg-gray-100 flex justify-between items-center">
+        <div className="p-3 bg-gray-100 flex justify-between items-center -mx-5">
           <div className="flex items-center">
             <img
               src="https://i.pinimg.com/736x/8c/9b/07/8c9b07e5f25b7776190bf9de4da60c47.jpg"
@@ -129,7 +129,7 @@ const Chat = () => {
               <div className="relative">
                 <img src={contact.avatar} alt={contact.name} className="h-12 w-12 rounded-full" />
                 {contact.isActive && (
-                  <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-green-500 ring-2 ring-white"></span>
+                  <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-gray-900 ring-2 ring-white"></span>
                 )}
               </div>
               <div className="ml-4 flex-1">
@@ -140,7 +140,7 @@ const Chat = () => {
                 <div className="flex justify-between items-center mt-1">
                   <p className="text-sm text-gray-500 truncate">{contact.lastMessage}</p>
                   {contact.unread > 0 && (
-                    <span className="inline-flex items-center justify-center h-5 w-5 rounded-full bg-green-500 text-xs font-medium text-white">
+                    <span className="inline-flex items-center justify-center h-5 w-5 rounded-full bg-gray-900 text-xs font-medium text-white">
                       {contact.unread}
                     </span>
                   )}
@@ -195,7 +195,7 @@ const Chat = () => {
               <div
                 className={`px-4 py-2 rounded-lg shadow ${
                   msg.sender === 'me'
-                    ? 'bg-green-500 text-white'
+                    ? 'bg-gray-900 text-white'
                     : 'bg-gray-200 text-gray-900'
                 }`}
               >
@@ -240,11 +240,11 @@ const Chat = () => {
           />
           <button
             onClick={handleSendMessage}
-            className="text-white bg-green-500 hover:bg-green-600 p-2 rounded-full"
+            className="text-white bg-sky-500 hover:bg-green-600 p-2 rounded-full"
           >
             <Send className="h-5 w-5" />
           </button>
-          <button className="text-gray-600 hover:text-gray-800">
+          <button className="text-gray-900 hover:text-green-500">
             <Mic className="h-5 w-5" />
           </button>
         </div>

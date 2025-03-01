@@ -41,7 +41,7 @@ const AdminLogin = () => {
     setFormData((prev) => ({ ...prev, loading: true }));
     try {
       const { adminEmail, adminPassword } = formData;
-      const response = await axios.post("http://127.0.0.1:8000/api/admin/login", {
+      const response = await axios.post("http://127.0.0.1:8000/api/admin", {
         email: adminEmail,
         password: adminPassword,
       });
@@ -49,7 +49,7 @@ const AdminLogin = () => {
       setFormData((prev) => ({ ...prev, loading: false }));
       if (response.data.token) {
         localStorage.setItem("adminToken", response.data.token);
-        window.location.replace("/admin");
+        window.location.replace("/admin/dashboard");
       } else {
         alert("TRY AGAIN!");
       }

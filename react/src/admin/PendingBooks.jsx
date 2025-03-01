@@ -1,51 +1,127 @@
-import React from 'react';
-import { Check, X } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const PendingBooks = () => {
-  const pendingBooks = [
-    {
-      id: 1,
-      title: "1984",
-      author: "George Orwell",
-      owner: "Alice Smith",
-      condition: "Good",
-      requestDate: "2024-03-15",
-      image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=200"
-    },
-    // Add more mock data as needed
-  ];
+    const [pendingActivities, setPendingActivities] = useState([]);
 
-  return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-6">Pending Book Approvals</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {pendingBooks.map((book) => (
-          <div key={book.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-            <img src={book.image} alt={book.title} className="w-full h-48 object-cover" />
-            <div className="p-4">
-              <h3 className="text-lg font-semibold">{book.title}</h3>
-              <p className="text-gray-600">by {book.author}</p>
-              <div className="mt-2">
-                <p><span className="font-medium">Owner:</span> {book.owner}</p>
-                <p><span className="font-medium">Condition:</span> {book.condition}</p>
-                <p><span className="font-medium">Request Date:</span> {book.requestDate}</p>
-              </div>
-              <div className="mt-4 flex gap-2">
-                <button className="flex-1 bg-green-500 text-white py-2 rounded-md flex items-center justify-center gap-2 hover:bg-green-600">
-                  <Check size={18} />
-                  Approve
-                </button>
-                <button className="flex-1 bg-red-500 text-white py-2 rounded-md flex items-center justify-center gap-2 hover:bg-red-600">
-                  <X size={18} />
-                  Reject
-                </button>
-              </div>
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem("authToken");
+                if (!token) {
+                    console.log("Authentication token not found");
+                    return;
+                }
+
+                const activitiesRes = await axios.get(
+                    "http://127.0.0.1:8000/api/recent-activities",
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
+
+                setPendingActivities(activitiesRes.data);
+            } catch (error) {
+                console.error("Error fetching data:", error.response || error.message);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const handleStatusChange = async (bookId) => {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+            console.log("Authentication token not found");
+            return;
+        }
+    
+        try {
+            await axios.patch(
+                `http://127.0.0.1:8000/api/books/${bookId}/status`,
+                { status: "available" },
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+    
+            // Remove the approved book from the list
+            setPendingActivities((prevActivities) =>
+                prevActivities.filter((activity) => activity.id !== bookId)
+            );
+        } catch (error) {
+            console.error("Error updating status:", error.response || error.message);
+        }
+    };
+    
+
+    const handleRejectAndDelete = async (bookId) => {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+            console.log("Authentication token not found");
+            return;
+        }
+
+        try {
+            await axios.delete(`http://127.0.0.1:8000/api/books/${bookId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            setPendingActivities((prevActivities) =>
+                prevActivities.filter((activity) => activity.id !== bookId)
+            );
+            console.log("Book rejected and deleted from the database");
+        } catch (error) {
+            console.error("Error deleting the book:", error.response || error.message);
+        }
+    };
+
+    return (
+        <div className="p-8 bg-gray-50 min-h-screen flex flex-col items-center">
+            <div className="max-w-5xl w-full">
+                <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Pending Book Approvals</h2>
+                <div className="bg-white shadow-md rounded-lg overflow-hidden">
+                    <div className="p-4">
+                        {pendingActivities.length === 0 ? (
+                            <p className="text-center text-gray-500">No pending approvals.</p>
+                        ) : (
+                            <div className="space-y-4">
+                                {pendingActivities.map((activity) => (
+                                    <div key={activity.id} className="p-4 bg-gray-100 rounded-md flex items-center gap-6">
+                                        <img
+                                            src={activity.cover_image ? `http://127.0.0.1:8000/storage/${activity.cover_image}` : "https://via.placeholder.com/150"}
+                                            alt={activity.title}
+                                            className="w-20 h-28 object-cover rounded-lg"
+                                        />
+                                        <div className="flex-1">
+                                            <h3 className="text-lg font-semibold">{activity.title}</h3>
+                                            <p className="text-sm text-gray-500">Author: {activity.author}</p>
+                                            <p className="text-sm text-gray-500">Genre: {activity.genre}</p>
+                                            <p className="text-sm text-gray-500">Condition: {activity.condition}</p>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <button
+                                                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition"
+                                                onClick={() => handleStatusChange(activity.id)}
+                                            >
+                                                Approve
+                                            </button>
+                                            <button
+                                                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
+                                                onClick={() => handleRejectAndDelete(activity.id)}
+                                            >
+                                                Reject
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+        </div>
+    );
 };
 
 export default PendingBooks;
