@@ -67,7 +67,7 @@ const BookUpload = () => {
             );
 
             console.log("Book uploaded:", response.data);
-            alert("Book submitted successfully!");
+            alert("Book submitted successfully for admin approval!");
 
             setBookTitle("");
             setAuthor("");

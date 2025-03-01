@@ -39,7 +39,7 @@ const Dashboard = () => {
     if (error) return <div className="text-center text-red-500 font-semibold">{error}</div>;
 
     return (
-        <div className="p-8 bg-gray-50 min-h-screen">
+        <div className="p-8 min-h-screen">
             <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Admin Dashboard</h2>
 
             {/* Dashboard Statistics */}

@@ -86,7 +86,7 @@ const BookDetails = () => {
 
             <div className="flex flex-col gap-12">
                 <div className="max-w-[1050px] w-full h-auto mx-auto bg-[#f8f9fa] border border-gray-200 rounded-xl px-16 py-24 shadow-lg -my-18">
-                    <h2 className="text-xl font-bold mb-4">Genres</h2>
+                    <h2 className="text-xl font-bold mb-4">Genre</h2>
                     <p className="w-fit text-lg font-semibold rounded-2xl text-black border border-black px-4 py-2 my-4">
                         {book.genre}
                     </p>
@@ -101,7 +101,7 @@ const BookDetails = () => {
                             to={`/user/${book.owner_id}`} // Link to User page with owner_id as a parameter
                             className="text-red-500 hover:underline font-semibold"
                         >
-                            Contact with the book owner
+                            Contact with book owner
                         </Link>
                     </div>
                 </div>

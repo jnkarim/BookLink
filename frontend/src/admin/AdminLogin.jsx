@@ -66,7 +66,7 @@ const AdminLogin = () => {
   const { adminEmail, adminPassword, showPassword, loading, emailError, passwordError } = formData;
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen bg-gray-50 transition-all duration-300">
+    <div className="flex flex-col lg:flex-row h-screen transition-all duration-300">
       <div className="lg:w-1/2 w-full h-full flex justify-center items-center p-4">
         <img src={loginImage} alt="Admin Login Illustration" className="w-4/5 sm:w-3/4 lg:w-3/5 xl:w-2/3 h-auto object-contain transition-all duration-500" />
       </div>

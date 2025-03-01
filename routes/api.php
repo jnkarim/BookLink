@@ -2,21 +2,21 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\authController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\AdminController;
 
 
 // Public Authentication Routes
-Route::post('/registeruser', [authController::class, 'register']);
-Route::post('/login', [authController::class, 'loginuser']);
+Route::post('/registeruser', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'loginuser']);
 
 // Authenticated User Routes
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', [authController::class, 'getUserData']);
-    Route::post('/logout', [authController::class, 'logout']);
-    Route::put('/user/update', [authController::class, 'update']); // Changed PUT to PATCH
-    Route::post('/user/upload-profile-picture', [authController::class, 'updateProfilePicture']);
+    Route::get('/user', [AuthController::class, 'getUserData']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::put('/user/update', [AuthController::class, 'update']); // Changed PUT to PATCH
+    Route::post('/user/upload-profile-picture', [AuthController::class, 'updateProfilePicture']);
     Route::get('/count-users', [AuthController::class, 'countUsers']);
 
 });

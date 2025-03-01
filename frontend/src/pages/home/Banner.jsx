@@ -46,19 +46,6 @@ function Banner() {
             </div>
           </div>
 
-          {/* Right side */}
-          <div className="relative flex items-center md:space-x-6 space-x-3">
-            {/* Cart */}
-            <Link
-              to="/cart"
-              className="bg-gray-900 text-white p-1 sm:px-6 px-2 flex items-center rounded-sm gap-2"
-            >
-              <FaCartShopping className="w-6 h-6" />
-              <span className="text-sm font-semibold">
-                {cartItems.length > 0 ? cartItems.length : "0"}
-              </span>
-            </Link>
-          </div>
         </nav>
       </header>
 
@@ -85,7 +72,7 @@ function Banner() {
           </Link>
         </div>
 
-        <div className="md:w-1/2 w-full flex flex-col items-center">
+        <div className="md:w-1/2 w-full flex flex-col items-center -my-12">
           <h3 className="section-header font-secondary text-3xl font-bold text-gray-800">
             Featured Books
           </h3>
