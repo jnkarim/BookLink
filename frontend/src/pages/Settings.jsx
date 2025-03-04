@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { MdOutlineFileUpload } from "react-icons/md";
-import { FaSave } from "react-icons/fa";
+import { useOutletContext } from "react-router-dom";
 
 const Settings = () => {
+    const { setLoading } = useOutletContext(); // Ensure setLoading is provided by the parent
     const [user, setUser] = useState({
         name: "",
         email: "",
@@ -14,24 +15,33 @@ const Settings = () => {
     });
     const [profilePreview, setProfilePreview] = useState(null);
     const [profileFile, setProfileFile] = useState(null);
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
+                setLoading(true); // Start loading
                 const token = localStorage.getItem("authToken");
+                if (!token) throw new Error("No auth token found"); // Handle missing token
+
                 const response = await axios.get("http://127.0.0.1:8000/api/user", {
                     headers: { Authorization: `Bearer ${token}` },
                 });
+
+                const profilePic = response.data.profile_picture
+                    ? `http://127.0.0.1:8000/storage/${response.data.profile_picture}`
+                    : null;
+
                 setUser(response.data);
-                setProfilePreview(response.data.profile_picture);
+                setProfilePreview(profilePic);
             } catch (err) {
                 setError("Failed to load user data");
+            } finally {
+                setLoading(false); // Stop loading
             }
         };
         fetchUserData();
-    }, []);
+    }, [setLoading]); // Removed unnecessary dependency on setLoading
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -48,10 +58,11 @@ const Settings = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
+        setLoading(true); // Start loading
 
         try {
             const token = localStorage.getItem("authToken");
+            if (!token) throw new Error("No auth token found"); // Handle missing token
 
             await axios.put("http://127.0.0.1:8000/api/user/update", user, {
                 headers: {
@@ -64,7 +75,7 @@ const Settings = () => {
                 const formData = new FormData();
                 formData.append("profile_picture", profileFile);
 
-                await axios.post(
+                const uploadResponse = await axios.post(
                     "http://127.0.0.1:8000/api/user/upload-profile-picture",
                     formData,
                     {
@@ -74,13 +85,15 @@ const Settings = () => {
                         },
                     }
                 );
+                setProfilePreview(uploadResponse.data.profile_picture);
             }
 
             alert("Your profile has been updated!");
         } catch (err) {
             setError("Failed to update profile");
+        } finally {
+            setLoading(false); // Stop loading
         }
-        setLoading(false);
     };
 
     return (
@@ -99,14 +112,18 @@ const Settings = () => {
                 {/* Profile Picture */}
                 <div className="flex flex-col items-center mb-6">
                     <div className="relative">
-                        {profilePreview && (
+                        {profilePreview ? (
                             <img
                                 src={profilePreview}
                                 alt="Profile Preview"
                                 className="w-32 h-32 rounded-full object-cover border-4 border-gray-900 shadow-xl mb-4 bg-[#f0eee2]"
                             />
+                        ) : (
+                            <div className="w-32 h-32 rounded-full border-4 border-gray-900 shadow-xl mb-4 bg-[#f0eee2] flex items-center justify-center text-gray-500">
+                                No Image
+                            </div>
                         )}
-                        <label className="absolute bottom-0 right-0 bg-gray-900  text-white p-2 rounded-full cursor-pointer hover:bg-red-500 transition duration-300">
+                        <label className="absolute bottom-0 right-0 bg-gray-900 text-white p-2 rounded-full cursor-pointer hover:bg-red-500 transition duration-300">
                             <MdOutlineFileUpload size={20} />
                             <input
                                 type="file"
@@ -116,88 +133,38 @@ const Settings = () => {
                             />
                         </label>
                     </div>
-
                 </div>
 
                 {/* Form Fields */}
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
-                        <label className="block text-gray-600 text-lg font-medium mb-2">Name</label>
-                        <input
-                            type="text"
-                            name="name"
-                            value={user.name}
-                            onChange={handleChange}
-                            className="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 transition duration-300 bg-[#f0eee2]"
-                            placeholder="Enter your name"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-600 text-lg font-medium mb-2">Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={user.email}
-                            onChange={handleChange}
-                            className="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 bg-[#f0eee2]"
-                            placeholder="Enter your email"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-600 text-lg font-medium mb-2">Phone Number</label>
-                        <input
-                            type="text"
-                            name="phone"
-                            value={user.phone}
-                            onChange={handleChange}
-                            className="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 bg-[#f0eee2]"
-                            placeholder="Enter phone number"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-600 text-lg font-medium mb-2">Address</label>
-                        <input
-                            type="text"
-                            name="address"
-                            value={user.address}
-                            onChange={handleChange}
-                            className="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 bg-[#f0eee2]"
-                            placeholder="Enter your address"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-600 text-lg font-medium mb-2">Bio</label>
-                        <textarea
-                            name="bio"
-                            value={user.bio}
-                            onChange={handleChange}
-                            className="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none h-24 bg-[#f0eee2]"
-                            placeholder="Tell us about yourself"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-600 text-lg font-medium mb-2">Password</label>
-                        <input
-                            type="password"
-                            name="password"
-                            value={user.password}
-                            onChange={handleChange}
-                            className="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 bg-[#f0eee2]"
-                            placeholder="Enter a new password"
-                        />
-                    </div>
+                    {[
+                        { label: "Name", name: "name", type: "text" },
+                        { label: "Email", name: "email", type: "email" },
+                        { label: "Phone Number", name: "phone", type: "text" },
+                        { label: "Address", name: "address", type: "text" },
+                        { label: "Bio", name: "bio", type: "text" },
+                        { label: "Password", name: "password", type: "password" },
+                    ].map(({ label, name, type }) => (
+                        <div key={name}>
+                            <label className="block text-gray-600 text-lg font-medium mb-2">
+                                {label}
+                            </label>
+                            <input
+                                type={type}
+                                name={name}
+                                value={user[name]}
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 border-1 rounded-md border-gray-300 focus:ring-2 focus:ring-indigo-500"
+                                placeholder={`Enter your ${label.toLowerCase()}`}
+                            />
+                        </div>
+                    ))}
 
                     <button
                         type="submit"
-                        className="w-full bg-gray-900 text-white py-3 rounded-lg font-medium hover:bg-red-500 transition duration-300 flex items-center justify-center gap-3"
-                        disabled={loading}
+                        className="w-full bg-gray-900 text-white py-3 rounded-full font-medium hover:bg-red-500 transition duration-300 flex items-center justify-center gap-3"
                     >
-                        {loading ? "Saving..." : <><FaSave /> Save Changes</>}
+                        Save Changes
                     </button>
                 </form>
             </div>

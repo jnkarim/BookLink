@@ -143,7 +143,7 @@ const Profile = () => {
                                                             : "https://via.placeholder.com/150"
                                                     }
                                                     alt={book.title}
-                                                    className="object-cover rounded-lg w-full h-auto"
+                                                    className="object-contain rounded-lg w-full h-64"
                                                 />
                                                 {/* Book Title wrapped with Link to make it clickable */}
                                                 <Link

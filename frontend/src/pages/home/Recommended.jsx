@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 
 const Recommended = () => {
   const [books, setBooks] = useState([]);
-
+  const [loading, setLoading] = useState(true); // Define loading state
+  const [error, setError] = useState(null); // Define error state
 
   // Fetch book data from the API
   useEffect(() => {
     const fetchBooks = async () => {
+      setLoading(true); // Set loading to true when starting fetch
       try {
         const token = localStorage.getItem("authToken"); // Get the auth token
         const response = await fetch("http://127.0.0.1:8000/api/books", {
@@ -26,48 +28,55 @@ const Recommended = () => {
         setError(error.message); // Handle error
         console.error("Error fetching books:", error);
       } finally {
-        setLoading(false);
+        setLoading(false); // Ensure loading is false after fetch
       }
     };
 
     fetchBooks();
   }, []);
 
-  
-
   return (
     <div className="py-16 flex flex-col lg:flex-row gap-8">
       {/* Books Section */}
       <div className="w-full lg:w-1/2">
         <h2 className="text-3xl font-semibold mb-6">Recommended</h2>
-        {/* Grid Layout for Books */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {books
-            .slice(0, 4) // Limit to first 4 available books (adjust as needed)
-            .map((book) => (
-              <div key={book.id} className="border p-4 rounded shadow-md">
-                <img
-                  src={
-                    book.cover_image
-                      ? `http://127.0.0.1:8000/storage/${book.cover_image}`
-                      : "https://via.placeholder.com/150"
-                  }
-                  alt={book.title}
-                  className="w-full h-60 object-contain rounded-md"
-                />
-                <h3 className="text-lg font-semibold mt-2 text-center text-gray-700">
-                  {book.title}
-                </h3>
 
-                <Link
-                  to={`/book/${book.id}`}
-                  className="text-gray-500 font-bold mt-2 inline-block px-16 hover:text-red-600"
-                >
-                  View Details
-                </Link>
-              </div>
-            ))}
-        </div>
+        {/* Display error if there is one */}
+        {error && <p className="text-red-500">Error: {error}</p>}
+
+        {/* Show loading state */}
+        {loading ? (
+          <p>Loading books...</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {books.length > 0 ? (
+              books.slice(0, 4).map((book) => (
+                <div key={book.id} className="border p-4 rounded shadow-md">
+                  <img
+                    src={
+                      book.cover_image
+                        ? `http://127.0.0.1:8000/storage/${book.cover_image}`
+                        : "https://via.placeholder.com/150"
+                    }
+                    alt={book.title}
+                    className="w-full h-60 object-contain rounded-md"
+                  />
+                  <h3 className="text-lg font-semibold mt-2 text-center text-gray-700">
+                    {book.title}
+                  </h3>
+                  <Link
+                    to={`/book/${book.id}`}
+                    className="text-gray-500 font-bold mt-2 inline-block px-16 hover:text-red-600"
+                  >
+                    View Details
+                  </Link>
+                </div>
+              ))
+            ) : (
+              <p>No available books found.</p>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Notifications Section */}
