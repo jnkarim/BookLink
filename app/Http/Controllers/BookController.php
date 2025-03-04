@@ -72,4 +72,9 @@ class BookController extends Controller
     {
         return response()->json($this->bookService->getPendingBooks(), 200);
     }
+
+    public function showBooks($id)
+    {
+        return response()->json($this->bookService->showBooks($id), 200);
+    }
 }

@@ -7,8 +7,9 @@ const BookDetails = () => {
     const [book, setBook] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [loggedInUserId, setLoggedInUserId] = useState(null); // State to store logged-in user ID
 
-    // Fetch book details when the component mounts
+    // Fetch book details and logged-in user ID when the component mounts
     useEffect(() => {
         const fetchBookDetails = async () => {
             try {
@@ -28,6 +29,20 @@ const BookDetails = () => {
 
                 const data = await response.json();
                 setBook(data); // Set the state with the fetched book details
+
+                // Fetch logged-in user's ID (replace with your actual logic)
+                const userResponse = await fetch("http://127.0.0.1:8000/api/user", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (!userResponse.ok) {
+                    throw new Error("Failed to fetch user details");
+                }
+
+                const userData = await userResponse.json();
+                setLoggedInUserId(userData.id); // Set the logged-in user's ID
             } catch (error) {
                 setError(error.message); // Handle any errors
             } finally {
@@ -53,7 +68,7 @@ const BookDetails = () => {
     }
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen mt-8">
             <div className="flex flex-row">
                 {/* Book cover */}
                 <div className="w-72 h-auto bg-[#f0eee2] rounded-xl flex items-center justify-center shadow-sm relative mx-32 ">
@@ -95,15 +110,19 @@ const BookDetails = () => {
                         <h2 className="text-xl font-bold mb-4">Description</h2>
                         <p className="text-gray-700">{book.description}</p>
                     </div>
+
                     {/* Contact with the book owner link */}
-                    <div className="mt-8">
-                        <Link
-                            to={`/user/${book.owner_id}`} // Link to User page with owner_id as a parameter
-                            className="text-red-500 hover:underline font-semibold"
-                        >
-                            Contact with book owner
-                        </Link>
-                    </div>
+                    {loggedInUserId !== book.user_id && (
+                        <div className="mt-8">
+                            <Link
+                                to={`/user/${book.user_id}`} // Link to User page with owner_id as a parameter
+                                className="inline-flex items-center px-6 py-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-red-500 transition-colors"
+                            >
+                                <span>Contact with book owner</span>
+                                <ArrowRight className="ml-2" size={20} />
+                            </Link>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

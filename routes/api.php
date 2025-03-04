@@ -5,6 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
+
+
 
 
 // Public Authentication Routes
@@ -61,3 +66,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('books/{bookId}/status', [BookController::class, 'updateBookStatus']);
 
 });
+
+
+
+Route::get('/users/{id}', function ($id): JsonResponse {
+    $user = User::find($id);
+
+    if (!$user) {
+        return response()->json(['message' => 'User not found'], 404);
+    }
+
+    return response()->json($user);
+});
+
+
+Route::get('/users/{id}/books', [UserController::class, 'getUserBooks']);

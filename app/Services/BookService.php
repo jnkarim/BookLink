@@ -140,4 +140,16 @@ class BookService
     {
         return Book::with('user')->where('status', 'pending')->get();
     }
+
+    public function showBooks($id)
+    {
+        $book = Book::with('user')->find($id);
+
+        if (!$book) {
+            return response()->json(['message' => 'Book not found'], 404);
+        }
+
+        return response()->json($book);
+    }
+
 }
