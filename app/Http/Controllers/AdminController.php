@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use App\Models\Book;
+use App\Services\AdminService;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
+    protected $adminService;
+
+    public function __construct(AdminService $adminService)
+    {
+        $this->adminService = $adminService;
+    }
+
     /**
      * Admin Login
      */
@@ -19,9 +25,9 @@ class AdminController extends Controller
             'password' => 'required'
         ]);
 
-        $admin = User::where('email', $request->email)->where('role', 'admin')->first();
+        $admin = $this->adminService->authenticateAdmin($request->email, $request->password);
 
-        if (!$admin || !Hash::check($request->password, $admin->password)) {
+        if (!$admin) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
@@ -39,7 +45,7 @@ class AdminController extends Controller
      */
     public function pendingBooks()
     {
-        return response()->json(Book::where('status', 'pending')->get());
+        return response()->json($this->adminService->getPendingBooks());
     }
 
     /**
@@ -47,10 +53,8 @@ class AdminController extends Controller
      */
     public function approveBook($id)
     {
-        $book = Book::findOrFail($id);
-        $book->update(['status' => 'approved']);
-
-        return response()->json(['message' => 'Book approved successfully']);
+        $book = $this->adminService->approveBook($id);
+        return response()->json(['message' => 'Book approved successfully', 'book' => $book]);
     }
 
     /**
@@ -58,9 +62,7 @@ class AdminController extends Controller
      */
     public function rejectBook($id)
     {
-        $book = Book::findOrFail($id);
-        $book->update(['status' => 'rejected']);
-
-        return response()->json(['message' => 'Book rejected successfully']);
+        $book = $this->adminService->rejectBook($id);
+        return response()->json(['message' => 'Book rejected successfully', 'book' => $book]);
     }
 }

@@ -23,17 +23,15 @@ const Chat = () => {
     { id: 2, text: 'How are you doing?', sender: 'me', time: '09:31', status: 'read' },
     { id: 3, text: 'I\'m good, thanks for asking!', sender: 'other', time: '09:32', status: 'read' },
     { id: 4, text: 'What about you?', sender: 'other', time: '09:32', status: 'read' },
-    { id: 5, text: 'I\'m doing great! Just working on this new project.', sender: 'me', time: '09:33', status: 'read' },
-    { id: 6, text: 'That sounds interesting. What kind of project is it?', sender: 'other', time: '09:35', status: 'read' },
-    { id: 7, text: 'It\'s a chat application, similar to WhatsApp!', sender: 'me', time: '09:36', status: 'delivered' },
+    { id: 5, text: 'I want to borrow the Tom Sawyer book from you. Is it available?', sender: 'me', time: '09:33', status: 'read' },
+    { id: 6, text: 'Yes, it is.', sender: 'other', time: '09:35', status: 'read' },
+    { id: 7, text: 'Great!', sender: 'me', time: '09:36', status: 'delivered' },
   ]);
   
   const [contacts, setContacts] = useState([
     { id: 1, name: 'John Doe', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80', lastMessage: 'Hey there!', time: '09:32', unread: 0, isActive: true },
     { id: 2, name: 'Jane Smith', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80', lastMessage: 'See you tomorrow!', time: '08:45', unread: 2, isActive: false },
     { id: 3, name: 'Mike Johnson', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80', lastMessage: 'Thanks for the help!', time: 'Yesterday', unread: 0, isActive: false },
-    { id: 4, name: 'Sarah Williams', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80', lastMessage: 'Let\'s meet at 5', time: 'Yesterday', unread: 0, isActive: false },
-    { id: 5, name: 'David Brown', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80', lastMessage: 'Call me when you\'re free', time: 'Tuesday', unread: 0, isActive: false },
   ]);
   
   const [activeContact, setActiveContact] = useState(contacts[0]);
@@ -70,7 +68,7 @@ const Chat = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen">
       {/* Left Sidebar - Contacts */}
       <div
         className={`w-full sm:w-1/3 border-r border-gray-300 bg-white flex flex-col transition-transform transform ${
@@ -78,7 +76,7 @@ const Chat = () => {
         }`}
       >
         {/* Header */}
-        <div className="p-3 bg-gray-100 flex justify-between items-center">
+        <div className="p-3 bg-[#f0eee2] -mx-6 -my-6 flex justify-between items-center -mx-5">
           <div className="flex items-center">
             <img
               src="https://i.pinimg.com/736x/8c/9b/07/8c9b07e5f25b7776190bf9de4da60c47.jpg"
@@ -86,7 +84,7 @@ const Chat = () => {
               className="h-10 w-10 rounded-full"
             />
           </div>
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 ">
             <button className="text-gray-600 hover:text-gray-800">
               <MoreVertical className="h-5 w-5" />
             </button>
@@ -100,7 +98,7 @@ const Chat = () => {
         </div>
 
         {/* Search */}
-        <div className="p-3 bg-white">
+        <div className="p-3 bg-[#f0eee2] my-6 -mx-6">
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Search className="h-5 w-5 text-gray-400" />
@@ -114,7 +112,7 @@ const Chat = () => {
         </div>
 
         {/* Contacts List */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto bg-[#f0eee2] -mx-6 -my-6">
           {contacts.map((contact) => (
             <div
               key={contact.id}
@@ -129,7 +127,7 @@ const Chat = () => {
               <div className="relative">
                 <img src={contact.avatar} alt={contact.name} className="h-12 w-12 rounded-full" />
                 {contact.isActive && (
-                  <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-green-500 ring-2 ring-white"></span>
+                  <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-gray-900 ring-2 ring-white"></span>
                 )}
               </div>
               <div className="ml-4 flex-1">
@@ -140,7 +138,7 @@ const Chat = () => {
                 <div className="flex justify-between items-center mt-1">
                   <p className="text-sm text-gray-500 truncate">{contact.lastMessage}</p>
                   {contact.unread > 0 && (
-                    <span className="inline-flex items-center justify-center h-5 w-5 rounded-full bg-green-500 text-xs font-medium text-white">
+                    <span className="inline-flex items-center justify-center h-5 w-5 rounded-full bg-gray-900 text-xs font-medium text-white">
                       {contact.unread}
                     </span>
                   )}
@@ -152,9 +150,9 @@ const Chat = () => {
       </div>
 
       {/* Right Side - Chat */}
-      <div className="w-full sm:w-2/3 flex flex-col">
+      <div className="w-full sm:w-2/3 flex flex-col ">
         {/* Chat Header */}
-        <div className="p-3 bg-gray-100 border-b border-gray-300 flex justify-between items-center">
+        <div className="p-4 border-b border-gray-300 flex justify-between items-center mx-6 -my-6">
           <div className="flex items-center">
             <button
               onClick={() => setShowContacts(true)}
@@ -186,7 +184,7 @@ const Chat = () => {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 p-3 overflow-y-auto bg-gray-50">
+        <div className="flex-1 p-3 overflow-y-auto my-6 mx-6">
           {messages.map((msg) => (
             <div
               key={msg.id}
@@ -195,7 +193,7 @@ const Chat = () => {
               <div
                 className={`px-4 py-2 rounded-lg shadow ${
                   msg.sender === 'me'
-                    ? 'bg-green-500 text-white'
+                    ? 'bg-gray-900 text-white'
                     : 'bg-gray-200 text-gray-900'
                 }`}
               >
@@ -210,7 +208,7 @@ const Chat = () => {
         </div>
 
         {/* Input Area */}
-        <div className="p-3 border-t border-gray-300 bg-gray-100 flex items-center space-x-3">
+        <div className="p-3 border-t border-gray-300 flex items-center space-x-3 mx-6 -my-6">
           {showAttachmentOptions && (
             <div className="flex space-x-2">
               <button className="text-gray-600 hover:text-gray-800">
@@ -240,11 +238,11 @@ const Chat = () => {
           />
           <button
             onClick={handleSendMessage}
-            className="text-white bg-green-500 hover:bg-green-600 p-2 rounded-full"
+            className="text-white bg-sky-500 hover:bg-green-600 p-2 rounded-full"
           >
             <Send className="h-5 w-5" />
           </button>
-          <button className="text-gray-600 hover:text-gray-800">
+          <button className="text-gray-900 hover:text-green-500">
             <Mic className="h-5 w-5" />
           </button>
         </div>

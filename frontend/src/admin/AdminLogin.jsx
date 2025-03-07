@@ -41,7 +41,7 @@ const AdminLogin = () => {
     setFormData((prev) => ({ ...prev, loading: true }));
     try {
       const { adminEmail, adminPassword } = formData;
-      const response = await axios.post("http://127.0.0.1:8000/api/admin/login", {
+      const response = await axios.post("http://127.0.0.1:8000/api/admin", {
         email: adminEmail,
         password: adminPassword,
       });
@@ -49,7 +49,7 @@ const AdminLogin = () => {
       setFormData((prev) => ({ ...prev, loading: false }));
       if (response.data.token) {
         localStorage.setItem("adminToken", response.data.token);
-        window.location.replace("/admin");
+        window.location.replace("/admin/dashboard");
       } else {
         alert("TRY AGAIN!");
       }
@@ -66,7 +66,7 @@ const AdminLogin = () => {
   const { adminEmail, adminPassword, showPassword, loading, emailError, passwordError } = formData;
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen bg-gray-50 transition-all duration-300">
+    <div className="flex flex-col lg:flex-row h-screen transition-all duration-300">
       <div className="lg:w-1/2 w-full h-full flex justify-center items-center p-4">
         <img src={loginImage} alt="Admin Login Illustration" className="w-4/5 sm:w-3/4 lg:w-3/5 xl:w-2/3 h-auto object-contain transition-all duration-500" />
       </div>

@@ -75,14 +75,14 @@ const Profile = () => {
                                 <div className="mt-8 space-y-4 w-full">
                                     <Link
                                         to="/settings"
-                                        className="flex items-center justify-center w-full bg-gray-900 hover:bg-sky-500 text-white py-3 px-6 rounded-lg transition duration-300"
+                                        className="flex items-center justify-center w-full bg-gray-900 hover:bg-red-500 text-white py-3 px-6 rounded-lg transition duration-300"
                                     >
                                         <FaEdit className="mr-2" />
                                         Edit Profile
                                     </Link>
                                     <Link
                                         to="/upload-book"
-                                        className="flex items-center justify-center w-full bg-gray-900 hover:bg-sky-500 text-white py-3 px-6 rounded-lg transition duration-300"
+                                        className="flex items-center justify-center w-full bg-gray-900 hover:bg-red-500 text-white py-3 px-6 rounded-lg transition duration-300"
                                     >
                                         <FaUpload className="mr-2" />
                                         Upload Book
@@ -114,7 +114,10 @@ const Profile = () => {
                             <div className="bg-gray-100 p-4 rounded-xl shadow-md mb-6 flex items-center justify-between">
                                 <span className="text-lg font-medium text-gray-700">
                                     <strong>
-                                        {user?.books?.filter((book) => book.status === 'available').length || 0}
+                                        {user?.books?.filter(
+                                            (book) =>
+                                                book.status === "available"
+                                        ).length || 0}
                                     </strong>{" "}
                                     Books Available
                                 </span>
@@ -123,12 +126,16 @@ const Profile = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {user?.books && user.books.length > 0 ? (
                                     user.books
-                                        .filter((book) => book.status === "available")
+                                        .filter(
+                                            (book) =>
+                                                book.status === "available"
+                                        ) // Filter books with 'available' status
                                         .map((book) => (
                                             <div
                                                 key={book.id}
-                                                className="bg-gray-100 rounded-xl shadow-md p-4"
+                                                className="w-full max-w-xs mx-auto rounded-xl flex flex-col items-center justify-center"
                                             >
+                                                {/* Book Cover Image */}
                                                 <img
                                                     src={
                                                         book.cover_image
@@ -136,22 +143,21 @@ const Profile = () => {
                                                             : "https://via.placeholder.com/150"
                                                     }
                                                     alt={book.title}
-                                                    className="w-full h-40 object-cover rounded-lg"
+                                                    className="object-contain rounded-lg w-full h-64"
                                                 />
-                                                <h3 className="mt-4 text-xl font-semibold text-gray-900">
+                                                {/* Book Title wrapped with Link to make it clickable */}
+                                                <Link
+                                                    to={`/book/${book.id}`}
+                                                    className="mt-4 text-xl font-bold text-gray-500 text-center underline hover:text-red-500 "
+                                                >
                                                     {book.title}
-                                                </h3>
-                                                <p className="text-sm text-gray-600">
-                                                    {book.author}
-                                                </p>
-                                                <p className="mt-2 text-gray-700">
-                                                    {book.description}
-                                                </p>
+                                                </Link>
+
                                             </div>
                                         ))
                                 ) : (
-                                    <p className="text-gray-500">
-                                        No books available to show.
+                                    <p className=" text-red-500 w-full whitespace-nowrap">
+                                        No available books found of the current user.
                                     </p>
                                 )}
                             </div>
