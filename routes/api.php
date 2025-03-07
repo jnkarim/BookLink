@@ -10,6 +10,9 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 
 
+use App\Http\Controllers\ChatController;
+
+
 
 
 // Public Authentication Routes
@@ -81,3 +84,12 @@ Route::get('/users/{id}', function ($id): JsonResponse {
 
 
 Route::get('/users/{id}/books', [UserController::class, 'getUserBooks']);
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    // Send a message
+    Route::post('/send-message', [ChatController::class, 'sendMessage']);
+
+    // Fetch messages
+    Route::get('/get-messages', [ChatController::class, 'getMessages']);
+});
