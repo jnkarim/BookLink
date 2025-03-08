@@ -140,8 +140,8 @@ const Cart = () => {
                     Book Requests
                 </h1>
                 {pendingRequests.length === 0 ? (
-                    <div className="text-center py-10">
-                        <p className="text-gray-600 text-lg">
+                    <div className="text-center py-10 -mx-8">
+                        <p className="text-gray-600 text-lg ">
                             No book requests available.
                         </p>
                     </div>
