@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/user/update', [AuthController::class, 'update']); // Changed PUT to PATCH
     Route::post('/user/upload-profile-picture', [AuthController::class, 'updateProfilePicture']);
     Route::get('/count-users', [AuthController::class, 'countUsers']);
+    Route::get('/transactions', [TransactionController::class, 'getAllTransactions']);
 
 });
 
@@ -39,7 +40,10 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/admin/pending-books', [AdminController::class, 'pendingBooks']);
     Route::post('/admin/approve-book/{id}', [AdminController::class, 'approveBook']);
     Route::post('/admin/reject-book/{id}', [AdminController::class, 'rejectBook']);
+    Route::get('/admin/transactions', [TransactionController::class, 'getAllTransactions']);
 });
+
+
 
 
 

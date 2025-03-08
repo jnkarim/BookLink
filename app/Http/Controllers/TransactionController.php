@@ -142,5 +142,25 @@ class TransactionController extends Controller
         }
     }
 
+    public function getAllTransactions()
+    {
+        try {
+            // Fetch all transactions for the authenticated user
+            $user = auth()->user();
+            $transactions = Transaction::with(['sender', 'receiver', 'book'])
+                ->where('sender_id', $user->id)
+                ->orWhere('receiver_id', $user->id)
+                ->get();
+    
+            return response()->json($transactions);
+        } catch (\Exception $e) {
+            Log::error('Failed to fetch transactions: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Failed to fetch transactions'
+            ], 500);
+        }
+    }
+    
+
     
 }
