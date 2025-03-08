@@ -4,14 +4,13 @@ import Home from "../pages/home/Home.jsx";
 import Login from "../components/Login.jsx";
 import Register from "../components/Register.jsx";
 import Explore from "../pages/Explore.jsx";
-import CartPage from "../pages/books/CartPage.jsx";
-import BookDetails from "../pages/BookDetails.jsx";
+import BookDetails from "../pages/books/BookDetails.jsx";
 import PrivacyPolicy from "../components/PrivacyPolicy.jsx";
 import AboutUs from "../components/AboutUs.jsx";
 import ContactUs from "../components/ContactUs.jsx";
 import Settings from "../pages/Settings.jsx";
 import Profile from "../pages/Profile.jsx";
-import BookUpload from "../pages/BookUpload.jsx";
+import BookUpload from "../pages/books/BookUpload.jsx";
 
 import AdminDashboard from "../admin/Dashboard.jsx";
 import PendingBooks from "../admin/PendingBooks.jsx";
@@ -19,9 +18,9 @@ import PendingRequests from "../admin/PendingRequests.jsx";
 import ExchangeRecords from "../admin/ExchangeRecords.jsx";
 import AdminLayout from "../admin/AdminLayout.jsx";
 import AdminLogin from "../admin/AdminLogin.jsx"; // Admin Login Component
-import Chat from "../pages/Chat.jsx";
 
 import UserProfile from "../pages/UserProfile.jsx";
+import ExchangeReq from "../pages/ExchangeReq.jsx";
 
 // Function to check if admin is authenticated (Example)
 const isAdminAuthenticated = !!localStorage.getItem("adminToken"); // Replace with real auth logic
@@ -36,15 +35,14 @@ const router = createBrowserRouter([
             { path: "/login", element: <Login /> },
             { path: "/register", element: <Register /> },
             { path: "/book/:id", element: <BookDetails /> }, // Fix the path to be consistent with Profile link
-            { path: "/cart", element: <CartPage /> },
             { path: "/user/:id", element: <UserProfile /> },
             { path: "/profile", element: <Profile /> },
-            { path: "/chat/:userId", element: <Chat /> },
             { path: "/settings", element: <Settings /> },
             { path: "/privacy", element: <PrivacyPolicy /> },
             { path: "/about", element: <AboutUs /> },
             { path: "/contact", element: <ContactUs /> },
             { path: "/upload-book", element: <BookUpload /> },
+            { path: "/cart", element: <ExchangeReq/> },
         ],
     },
 
