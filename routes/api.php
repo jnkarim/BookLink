@@ -84,15 +84,7 @@ Route::get('/users/{id}', function ($id): JsonResponse {
 Route::get('/users/{id}/books', [UserController::class, 'getUserBooks']);
 
 
-<<<<<<< HEAD
-Route::middleware('auth:sanctum')->group(function () {
-    // Send a message
-    Route::post('/send-message', [ChatController::class, 'sendMessage']);
 
-    // Fetch messages
-    Route::get('/get-messages', [ChatController::class, 'getMessages']);
-});
-=======
 
 Route::middleware('auth:sanctum')->group(function () {
     // ... other routes
@@ -111,4 +103,3 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/transactions/{id}/reject', [TransactionController::class, 'rejectRequest']);
 });
 
->>>>>>> acec3208f5dc9940a9a2ee3c9ffbb2154ea6aad8
