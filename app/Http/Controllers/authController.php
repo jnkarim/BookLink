@@ -2,104 +2,66 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Validator;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use App\Services\UserService;
 
-class authController extends Controller
+class AuthController extends Controller
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     // Register Function
     public function register(Request $request)
     {
-        // Validation
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'phone' => 'required',
-            'address' => 'required',
-            'password' => 'required|min:6', // Ensure password has a minimum length
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'false',
-                'data' => $validator->errors()
-            ]);
-        } else {
-            // Creating the user
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'address' => $request->address,
-                'password' => bcrypt($request->password)  // Encrypting the password
-            ]);
-
-            return response()->json([
-                'status' => 'true',
-                'message' => 'User REGISTERED SUCCESSFULLY!',
-                'token' => $user->createToken('register_token')->plainTextToken
-            ]);
-        }
+        $response = $this->userService->registerUser($request->all());
+        return response()->json($response);
     }
 
     // Login Function
     public function loginuser(Request $request)
     {
-        // Validation
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|min:6',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'false',
-                'message' => 'Some input data error!',
-                'data' => $validator->errors()
-            ]);
-        } else {
-            // Authenticate User
-            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-                $user = Auth::user();
-                return response()->json([
-                    'status' => 'true',
-                    'message' => 'USER LOGIN SUCCESSFULLY!',
-                    'token' => $user->createToken('login_token')->plainTextToken
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 'false',
-                    'message' => 'AUTHENTICATION ERROR!',
-                ]);
-            }
-        }
+        $response = $this->userService->loginUser($request->all());
+        return response()->json($response);
     }
 
-// Logout Function
-public function logout(Request $request)
-{
-    // Get the authenticated user
-    $user = $request->user();
-
-    if ($user) {
-        // Revoke all tokens issued to the user
-        $user->tokens()->delete();
-
-        return response()->json([
-            'status' => 'true',
-            'message' => 'Successfully logged out, tokens revoked!'
-        ]);
+    // Logout Function
+    public function logout(Request $request)
+    {
+        $response = $this->userService->logoutUser($request->user());
+        return response()->json($response, $response['code'] ?? 200);
     }
 
-    return response()->json([
-        'status' => 'false',
-        'message' => 'No authenticated user found!'
-    ], 401);
-}
+    // Update User Profile
+    public function update(Request $request)
+    {
+        $response = $this->userService->updateUserProfile($request->user(), $request->all());
+        return response()->json($response);
+    }
 
-    
+    // Get User Data
+    public function getUserData(Request $request)
+    {
+        return response()->json($this->userService->getUserData($request->user()));
+    }
 
+    // Count Users
+    public function countUsers()
+    {
+        return response()->json($this->userService->countUsers());
+    }
+
+    // Update Profile Picture
+    public function updateProfilePicture(Request $request)
+    {
+        $request->validate([
+            'profile_picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $response = $this->userService->updateProfilePicture($request->user(), $request->file('profile_picture'));
+        return response()->json($response);
+    }
 }
