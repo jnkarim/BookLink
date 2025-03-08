@@ -102,4 +102,3 @@ Route::middleware('auth:sanctum')->group(function () {
     // Reject a request
     Route::put('/transactions/{id}/reject', [TransactionController::class, 'rejectRequest']);
 });
-

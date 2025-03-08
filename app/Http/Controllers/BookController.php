@@ -64,8 +64,10 @@ class BookController extends Controller
     // Get recent activities
     public function getRecentActivities()
     {
-        return response()->json($this->bookService->getRecentActivities(), 200);
+        $activities = $this->bookService->getRecentActivities();
+        return response()->json($activities, 200);
     }
+    
 
     // Get books with pending status
     public function recentActivities()

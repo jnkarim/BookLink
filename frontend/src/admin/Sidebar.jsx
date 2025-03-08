@@ -13,7 +13,7 @@ function Sidebar({ onLogout }) {
   ];
 
   return (
-    <div className="w-72 min-h-screen flex flex-col bg-gray-900 text-white shadow-lg px-8 py-8 -m-6">
+    <div className="w-72 min-h-screen flex flex-col bg-gray-900 text-white shadow-lg px-8 py-12 -m-6">
       {/* Sidebar Header */}
       <div className="flex items-center gap-3 mb-6 px-2">
         <BookOpen className="w-8 h-8 text-green-500" />
