@@ -1,16 +1,28 @@
 import React from "react";
-import { useLocation, NavLink } from "react-router-dom";
+import { useLocation, NavLink, useNavigate } from "react-router-dom";
 import { BookOpen, Users, RefreshCw, LayoutDashboard, LogOut } from "lucide-react";
 
 function Sidebar({ onLogout }) {
   const location = useLocation();
+  const navigate = useNavigate(); // Hook for navigation
 
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: <LayoutDashboard />, path: "/admin" },
     { id: "pending-books", label: "Pending Books", icon: <BookOpen />, path: "/admin/pending-books" },
-    { id: "pending-requests", label: "Pending Requests", icon: <Users />, path: "/admin/pending-requests" },
     { id: "exchange-records", label: "Exchange Records", icon: <RefreshCw />, path: "/admin/exchange-records" },
   ];
+
+  const handleLogout = () => {
+    // Clear the authentication token from local storage
+    localStorage.removeItem("authToken");
+
+    if (onLogout) {
+      onLogout();
+    }
+
+    // Redirect to the login page
+    navigate("/admin/login");
+  };
 
   return (
     <div className="w-72 min-h-screen flex flex-col bg-gray-900 text-white shadow-lg px-8 py-12 -m-6">
@@ -41,7 +53,7 @@ function Sidebar({ onLogout }) {
       {/* Logout Button */}
       <div className="mt-6">
         <button
-          onClick={onLogout}
+          onClick={handleLogout} // Use the handleLogout function
           className="w-full flex items-center gap-4 px-4 py-3 rounded-lg transition-all text-gray-300 hover:bg-red-600 hover:text-white"
         >
           <LogOut className="w-5 h-5" />
