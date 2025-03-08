@@ -48,10 +48,6 @@ const Explore = () => {
         fetchBooks();
     }, []);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
     // Filter books based on selected category and search query
     const filteredBooks = books
         .filter(
@@ -70,8 +66,23 @@ const Explore = () => {
     // Handle pagination
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
-        <div>
+        <div className="p-8">
+            {/* Search Bar */}
+            <div className="mb-8">
+                <input
+                    type="text"
+                    placeholder="Search books..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full p-2 border rounded"
+                />
+            </div>
+
             {/* Categories Section */}
             <section>
                 <h2 className="section-header mb-8 mt-4 text-2xl font-primary font-semibold">
@@ -81,7 +92,10 @@ const Explore = () => {
                     {categories.map((category, index) => (
                         <button
                             key={index}
-                            onClick={() => setSelectedCategory(category)} // Update selected category
+                            onClick={() => {
+                                setSelectedCategory(category); // Update selected category
+                                setCurrentPage(1); // Reset to the first page when category changes
+                            }}
                             className={`px-6 py-2 rounded-md shadow ${
                                 selectedCategory === category
                                     ? "bg-red-400 text-white"
@@ -101,33 +115,59 @@ const Explore = () => {
                         ? "All Books"
                         : `${selectedCategory} Books`}
                 </h2>
-                <div className="grid grid-cols-3 gap-4">
-                    {currentBooks.map((book) => (
-                        <div
-                            key={book._id}
-                            className="border p-4 rounded my-8 flex flex-col items-center"
-                        >
-                            <img
-                                src={
-                                    book.cover_image
-                                        ? `http://127.0.0.1:8000/storage/${book.cover_image}`
-                                        : "https://via.placeholder.com/150"
-                                }
-                                alt={book.title}
-                                className="w-full h-60 object-contain rounded-md"
-                            />
-                            <h3 className="text-lg font-semibold mt-2 text-center">
-                                {book.title}
-                            </h3>
-                            <Link
-                                to={`/book/${book.id}`}
-                                className="text-gray-500 font-bold mt-2 hover:text-red-600"
-                            >
-                                View Details
-                            </Link>
+                {filteredBooks.length === 0 ? (
+                    <p className="text-center text-gray-500">No books available.</p>
+                ) : (
+                    <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {currentBooks.map((book) => (
+                                <div
+                                    key={book._id}
+                                    className="border p-4 rounded my-8 flex flex-col items-center"
+                                >
+                                    <img
+                                        src={
+                                            book.cover_image
+                                                ? `http://127.0.0.1:8000/storage/${book.cover_image}`
+                                                : "https://via.placeholder.com/150"
+                                        }
+                                        alt={book.title}
+                                        className="w-full h-60 object-contain rounded-md"
+                                    />
+                                    <h3 className="text-lg font-semibold mt-2 text-center">
+                                        {book.title}
+                                    </h3>
+                                    <Link
+                                        to={`/book/${book.id}`}
+                                        className="text-gray-500 font-bold mt-2 hover:text-red-600"
+                                    >
+                                        View Details
+                                    </Link>
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
+
+                        {/* Pagination Controls */}
+                        <div className="flex justify-center mt-8">
+                            {Array.from(
+                                { length: Math.ceil(filteredBooks.length / booksPerPage) },
+                                (_, i) => (
+                                    <button
+                                        key={i + 1}
+                                        onClick={() => paginate(i + 1)}
+                                        className={`px-4 py-2 mx-1 rounded ${
+                                            currentPage === i + 1
+                                                ? "bg-red-400 text-white"
+                                                : "bg-[#f0eee2] text-black"
+                                        } hover:shadow-xl cursor-pointer`}
+                                    >
+                                        {i + 1}
+                                    </button>
+                                )
+                            )}
+                        </div>
+                    </>
+                )}
             </section>
         </div>
     );

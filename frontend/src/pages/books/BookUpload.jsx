@@ -143,11 +143,10 @@ const BookUpload = () => {
                 </div>
 
                 <div className="flex flex-col gap-12">
-                <div className="max-w-[1050px] w-full h-auto mx-auto bg-white border border-gray-200 rounded-xl px-16 py-24 shadow-lg -my-24">
-
+                    <div className="max-w-[1050px] w-full h-auto mx-auto bg-white border border-gray-200 rounded-xl px-16 py-24 shadow-lg -mt-24">
                         <div className="w-full">
                             <div className="mb-6">
-                                <h3 className="font-bold text-gray-700 mb-2 text-xl ">
+                                <h3 className="font-bold text-gray-700 mb-2 text-xl mt-4">
                                     Author
                                 </h3>
                                 <input
@@ -164,14 +163,25 @@ const BookUpload = () => {
                                 <h3 className="font-bold text-gray-700 mb-2 text-xl">
                                     Genre
                                 </h3>
-                                <input
-                                    type="text"
-                                    placeholder="Enter book genre"
+                                <select
                                     value={genre}
-                                    onChange={(e) => setGenre(e.target.value)} // Fixed this
-                                    className="w-full p-2 border-b border-gray-300 bg-transparent outline-none"
+                                    onChange={(e) => setGenre(e.target.value)}
+                                    className="w-full p-3 my-2 border border-gray-300 rounded-lg bg-white"
                                     required
-                                />
+                                >
+                                    <option value="" disabled>
+                                        Select Genre
+                                    </option>
+                                    <option value="Fiction">Fiction</option>
+                                    <option value="Non-fiction">
+                                        Non-fiction
+                                    </option>
+                                    <option value="Romance">Romance</option>
+                                    <option value="Detective">Detective</option>
+                                    <option value="Adventure">Adventure</option>
+                                    <option value="Thriller">Thriller</option>
+                                    <option value="Horror">Horror</option>
+                                </select>
                             </div>
 
                             <div className="mb-6">
@@ -184,8 +194,7 @@ const BookUpload = () => {
                                     onChange={(e) =>
                                         setDescription(e.target.value)
                                     }
-                                    className="w-full h-16 p-2 border border-gray-300 rounded-lg bg-transparent outline-none"
-
+                                    className="w-full h-20 p-2 border border-gray-300 rounded-lg bg-transparent outline-none"
                                     required
                                 />
                             </div>

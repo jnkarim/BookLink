@@ -2,22 +2,22 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { FaEdit, FaUpload } from "react-icons/fa";
+import { useOutletContext } from "react-router-dom";
 
 const Profile = () => {
+    const { loading, setLoading } = useOutletContext(); // Get loading state from context
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
+                setLoading(true);
+                setError(""); // Clear previous error
                 const token = localStorage.getItem("authToken");
-                const response = await axios.get(
-                    "http://127.0.0.1:8000/api/user",
-                    {
-                        headers: { Authorization: `Bearer ${token}` },
-                    }
-                );
+                const response = await axios.get("http://127.0.0.1:8000/api/user", {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
                 setUser(response.data);
             } catch (err) {
                 setError("Failed to load user data");
@@ -25,27 +25,20 @@ const Profile = () => {
                 setLoading(false);
             }
         };
+
         fetchUserData();
-    }, []);
+    }, [setLoading]);
 
     if (loading)
-        return (
-            <div className="text-center text-lg font-semibold">Loading...</div>
-        );
+        return <div className="text-center text-lg font-semibold">Loading...</div>;
+
     if (error)
-        return (
-            <div className="text-center text-sky-500 font-semibold">
-                {error}
-            </div>
-        );
+        return <div className="text-center text-red-500 font-semibold">{error}</div>;
 
     return (
         <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
-            {/* Page Header */}
             <div className="max-w-6xl mx-auto">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                    Profile
-                </h1>
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">Profile</h1>
             </div>
 
             {/* Profile Content */}
@@ -96,28 +89,19 @@ const Profile = () => {
                     <div className="col-span-2">
                         {/* About Section */}
                         <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                                About
-                            </h2>
-                            <p className="text-gray-600">
-                                {user?.bio || "No bio provided."}
-                            </p>
+                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">About</h2>
+                            <p className="text-gray-600">{user?.bio || "No bio provided."}</p>
                         </div>
 
                         {/* Books Section */}
                         <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                                My Books
-                            </h2>
+                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">My Books</h2>
 
                             {/* Book Count Box */}
                             <div className="bg-gray-100 p-4 rounded-xl shadow-md mb-6 flex items-center justify-between">
                                 <span className="text-lg font-medium text-gray-700">
                                     <strong>
-                                        {user?.books?.filter(
-                                            (book) =>
-                                                book.status === "available"
-                                        ).length || 0}
+                                        {user?.books?.filter((book) => book.status === "available").length || 0}
                                     </strong>{" "}
                                     Books Available
                                 </span>
@@ -126,15 +110,9 @@ const Profile = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {user?.books && user.books.length > 0 ? (
                                     user.books
-                                        .filter(
-                                            (book) =>
-                                                book.status === "available"
-                                        ) // Filter books with 'available' status
+                                        .filter((book) => book.status === "available") // Filter books with 'available' status
                                         .map((book) => (
-                                            <div
-                                                key={book.id}
-                                                className="w-full max-w-xs mx-auto rounded-xl flex flex-col items-center justify-center"
-                                            >
+                                            <div key={book.id} className="w-full max-w-xs mx-auto rounded-xl flex flex-col items-center justify-center">
                                                 {/* Book Cover Image */}
                                                 <img
                                                     src={
@@ -148,15 +126,14 @@ const Profile = () => {
                                                 {/* Book Title wrapped with Link to make it clickable */}
                                                 <Link
                                                     to={`/book/${book.id}`}
-                                                    className="mt-4 text-xl font-bold text-gray-500 text-center underline hover:text-red-500 "
+                                                    className="mt-4 text-xl font-bold text-gray-500 text-center underline hover:text-red-500"
                                                 >
                                                     {book.title}
                                                 </Link>
-
                                             </div>
                                         ))
                                 ) : (
-                                    <p className=" text-red-500 w-full whitespace-nowrap">
+                                    <p className="text-red-500 w-full whitespace-nowrap">
                                         No available books found of the current user.
                                     </p>
                                 )}
