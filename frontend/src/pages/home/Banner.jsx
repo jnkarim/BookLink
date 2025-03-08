@@ -11,7 +11,9 @@ import { HiBars3CenterLeft } from "react-icons/hi2";
 import { IoSearch } from "react-icons/io5";
 import { FaCartShopping } from "react-icons/fa6";
 import { useSelector } from "react-redux";
+import { FaExchangeAlt } from "react-icons/fa";
 import { getImgUrl } from "../../utils/getImgUrl";
+
 
 function Banner() {
   const cartItems = useSelector((state) => state.cart.cartItems);
@@ -44,6 +46,16 @@ function Banner() {
                 className="bg-[#EAEAEA] w-full py-2 pl-10 rounded-md focus:outline-none text-sm"
               />
             </div>
+          </div>
+
+          <div className="relative flex items-center md:space-x-6 space-x-3">
+            {/* Cart */}
+            <Link
+              to="/cart"
+              className="bg-gray-900 text-white py-1 sm:px-6 px-2 flex items-center rounded-sm gap-2"
+            >
+              <FaExchangeAlt className="w-6 h-6" />
+            </Link>
           </div>
 
         </nav>

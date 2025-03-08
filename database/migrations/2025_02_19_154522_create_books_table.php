@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->string('author');
             $table->text('description')->nullable();
             $table->string('cover_image');
-            $table->enum('status', ['pending', 'available']);
+            $table->enum('status', ['pending', 'available', 'exchanged'])->default('pending')->change();
             $table->string('language');
             $table->enum('condition', ['new', 'old']);
             $table->string('genre');

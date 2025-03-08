@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -38,7 +39,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/admin/pending-books', [AdminController::class, 'pendingBooks']);
     Route::post('/admin/approve-book/{id}', [AdminController::class, 'approveBook']);
     Route::post('/admin/reject-book/{id}', [AdminController::class, 'rejectBook']);
-    Route::post('/admin/promote-user/{id}', [AdminController::class, 'promoteToAdmin']);
 });
 
 
@@ -66,8 +66,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // Get statistics related to books and users
     Route::get('/stats', [BookController::class, 'getStats']);
 
-    Route::patch('books/{bookId}/status', [BookController::class, 'updateBookStatus']);
-
 });
 
 
@@ -86,10 +84,21 @@ Route::get('/users/{id}', function ($id): JsonResponse {
 Route::get('/users/{id}/books', [UserController::class, 'getUserBooks']);
 
 
-Route::middleware('auth:sanctum')->group(function () {
-    // Send a message
-    Route::post('/send-message', [ChatController::class, 'sendMessage']);
 
-    // Fetch messages
-    Route::get('/get-messages', [ChatController::class, 'getMessages']);
+Route::middleware('auth:sanctum')->group(function () {
+    // ... other routes
+    
+    Route::post('/transactions', [TransactionController::class, 'store']);
 });
+
+Route::middleware('auth:sanctum')->group(function () {
+    // Get pending requests for the logged-in user (book owner)
+    Route::get('/cart', [TransactionController::class, 'getPendingRequests']);
+
+    // Accept a request
+    Route::put('/transactions/{id}/accept', [TransactionController::class, 'acceptRequest']);
+
+    // Reject a request
+    Route::put('/transactions/{id}/reject', [TransactionController::class, 'rejectRequest']);
+});
+
