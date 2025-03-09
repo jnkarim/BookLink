@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Cart = () => {
+const ExchangeReq = () => {
     const [pendingRequests, setPendingRequests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -63,7 +63,6 @@ const Cart = () => {
                 throw new Error("Failed to accept request");
             }
 
-            // Remove the accepted request from the list
             setPendingRequests((prevRequests) =>
                 prevRequests.filter((request) => request.id !== transactionId)
             );
@@ -98,7 +97,6 @@ const Cart = () => {
                 );
             }
 
-            // Remove the rejected request from the list
             setPendingRequests((prevRequests) =>
                 prevRequests.filter((request) => request.id !== transactionId)
             );
@@ -140,8 +138,8 @@ const Cart = () => {
                     Book Requests
                 </h1>
                 {pendingRequests.length === 0 ? (
-                    <div className="text-center py-10 -mx-8">
-                        <p className="text-gray-600 text-lg ">
+                    <div className="text-center py-10">
+                        <p className="flex text-gray-600 text-lg ">
                             No book requests available.
                         </p>
                     </div>
@@ -211,4 +209,4 @@ const Cart = () => {
     );
 };
 
-export default Cart;
+export default ExchangeReq;

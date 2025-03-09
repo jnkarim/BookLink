@@ -59,13 +59,6 @@ const UserProfile = () => {
 
     return (
         <div className="min-h-screen p-6">
-            {/* Floating Chat Button */}
-            <Link
-                to={`/chat/${id}`}
-                className="fixed bottom-8 right-8 bg-gray-900 text-white p-4 rounded-full shadow-lg hover:bg-red-500 transition-transform transform hover:scale-110 flex items-center gap-2"
-            >
-                <MdChat size={24} />
-            </Link>
 
             {/* Profile Card */}
             <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
