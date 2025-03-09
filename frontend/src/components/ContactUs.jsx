@@ -12,7 +12,7 @@ const ContactUs = () => {
 
         {/* Intro Text */}
         <p className="text-lg sm:text-xl text-gray-700 text-center mb-6 animate__animated animate__fadeIn animate__delay-1s">
-          We'd love to hear from you! Fill out the form below, and we'll get back to you as soon as possible.
+          We&apos;d love to hear from you! Fill out the form below, and we&apos;ll get back to you as soon as possible.
         </p>
 
         {/* Contact Form */}

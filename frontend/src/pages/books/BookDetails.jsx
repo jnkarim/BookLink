@@ -153,10 +153,10 @@ const BookDetails = () => {
                         <div className="mt-8 flex flex-col gap-4 w-1/3">
                             {/* Contact with book owner button */}
                             <Link
-                                to={`/user/${book.user_id}`} // Link to User page with owner_id as a parameter
+                                to={`/user/${book.user_id}`} 
                                 className="inline-flex items-center justify-center px-6 py-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-sky-500 transition-colors"
                             >
-                                <span>Contact with book owner</span>
+                                <span>See book owner&aposs info</span>
                                 <ArrowRight className="ml-2" size={20} />
                             </Link>
 

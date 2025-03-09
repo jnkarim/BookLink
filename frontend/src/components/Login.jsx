@@ -108,7 +108,7 @@ const Login = () => {
         </button>
 
         <p className="w-full sm:w-[350px] text-sm mb-1 text-gray-600 text-left">
-          Don't have an account? <Link to="/register" className="font-semibold text-gray-900 hover:underline">Sign up</Link>
+          Don&apost have an account? <Link to="/register" className="font-semibold text-gray-900 hover:underline">Sign up</Link>
         </p>
 
         <Link to="/" className="fixed top-5 left-5 bg-white p-3 rounded-full shadow-md hover:bg-gray-100">

@@ -59,18 +59,11 @@ const UserProfile = () => {
 
     return (
         <div className="min-h-screen p-6">
-            {/* Floating Chat Button */}
-            <Link
-                to={`/chat/${id}`}
-                className="fixed bottom-8 right-8 bg-gray-900 text-white p-4 rounded-full shadow-lg hover:bg-red-500 transition-transform transform hover:scale-110 flex items-center gap-2"
-            >
-                <MdChat size={24} />
-            </Link>
 
             {/* Profile Card */}
             <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
                 <div className="relative h-28 bg-gray-900 flex items-center justify-center font-bold">
-                    <h1 className="font-semibold text-2xl text-white">Book Owner's Info</h1>
+                    <h1 className="font-semibold text-2xl text-white">Book Owner&aposs Info</h1>
                 </div>
 
                 <div className="p-4">

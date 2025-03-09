@@ -11,10 +11,6 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 
 
-use App\Http\Controllers\ChatController;
-
-
-
 
 // Public Authentication Routes
 Route::post('/registeruser', [AuthController::class, 'register']);
@@ -31,10 +27,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
 });
 
-// Admin Authentication Route (Public)
 Route::post('/admin', [AdminController::class, 'login']);
 
-// Admin-Only Routes (Requires Authentication & Admin Role)
+// Admin-Only Routes 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
     Route::get('/admin/pending-books', [AdminController::class, 'pendingBooks']);
@@ -46,41 +41,23 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
 
 
-
 Route::middleware('auth:sanctum')->group(function () {
-    // Store a new book
     Route::post('/books', [BookController::class, 'store']);
-
-    // Get all books
     Route::get('/books', [BookController::class, 'index']);
-
-    // Show a specific book by ID
     Route::get('/books/{id}', [BookController::class, 'show']);
-
-
-    // Update the status of a specific book by ID
-    Route::patch('/books/{id}/status', [BookController::class, 'updateBookStatus']); // This method is not defined in the controller. You may want to add the logic for updating the status of a book.
-
-    // Delete a specific book by ID
+    Route::patch('/books/{id}/status', [BookController::class, 'updateBookStatus']);
     Route::delete('/books/{id}', [BookController::class, 'destroy']);
-
-    // Get recent book activities
     Route::get('/recent-activities', [BookController::class, 'recentActivities']);
-
-    // Get statistics related to books and users
     Route::get('/stats', [BookController::class, 'getStats']);
-
 });
 
 
 
 Route::get('/users/{id}', function ($id): JsonResponse {
     $user = User::find($id);
-
     if (!$user) {
         return response()->json(['message' => 'User not found'], 404);
     }
-
     return response()->json($user);
 });
 
@@ -90,19 +67,13 @@ Route::get('/users/{id}/books', [UserController::class, 'getUserBooks']);
 
 
 
-Route::middleware('auth:sanctum')->group(function () {
-    // ... other routes
-    
+Route::middleware('auth:sanctum')->group(function () {   
     Route::post('/transactions', [TransactionController::class, 'store']);
 });
 
+
 Route::middleware('auth:sanctum')->group(function () {
-    // Get pending requests for the logged-in user (book owner)
     Route::get('/cart', [TransactionController::class, 'getPendingRequests']);
-
-    // Accept a request
     Route::put('/transactions/{id}/accept', [TransactionController::class, 'acceptRequest']);
-
-    // Reject a request
     Route::put('/transactions/{id}/reject', [TransactionController::class, 'rejectRequest']);
 });

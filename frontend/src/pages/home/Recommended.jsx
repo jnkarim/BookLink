@@ -86,21 +86,21 @@ const Recommended = () => {
           <li className="bg-[#f0eee2] p-6 rounded shadow-sm">
             <h2 className="font-bold">New Book Added</h2>
             <p className="text-black">
-              "The Time Has Come" is available to borrow.
+            &apos;The Time Has Come&apos; is available to borrow.
               <br /> Check it out!
             </p>
           </li>
           <li className="bg-[#f0eee2] p-4 rounded shadow-sm">
             <h2 className="font-bold">New Book Added</h2>
             <p className="text-black">
-              "The Fault in Our Stars" is available to borrow.
+            &aposThe Fault in Our Stars&apos is available to borrow.
               <br /> Check it out!
             </p>
           </li>
           <li className="bg-[#f0eee2] p-4 rounded shadow-sm">
             <h2 className="font-bold">New Book Added</h2>
             <p className="text-black">
-              "Sherlock Holmes" is available to borrow.
+            &aposSherlock Holmes&apos is available to borrow.
               <br /> Check it out!
             </p>
           </li>
