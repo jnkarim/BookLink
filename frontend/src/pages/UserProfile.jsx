@@ -63,7 +63,7 @@ const UserProfile = () => {
             {/* Profile Card */}
             <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
                 <div className="relative h-28 bg-gray-900 flex items-center justify-center font-bold">
-                    <h1 className="font-semibold text-2xl text-white">Book Owner's Info</h1>
+                    <h1 className="font-semibold text-2xl text-white">Book Owner&aposs Info</h1>
                 </div>
 
                 <div className="p-4">

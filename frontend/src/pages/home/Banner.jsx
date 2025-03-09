@@ -73,7 +73,7 @@ function Banner() {
             <br />
             in a cashless, sustainable way while sharing your
             <br />
-            collection and accessing others' treasures.
+            collection and accessing others&apos treasures.
           </p>
 
           <Link

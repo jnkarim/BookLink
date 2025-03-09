@@ -156,7 +156,7 @@ const BookDetails = () => {
                                 to={`/user/${book.user_id}`} 
                                 className="inline-flex items-center justify-center px-6 py-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-sky-500 transition-colors"
                             >
-                                <span>See book owner's info</span>
+                                <span>See book owner&aposs info</span>
                                 <ArrowRight className="ml-2" size={20} />
                             </Link>
 
