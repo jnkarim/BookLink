@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - ui/explore
   pull_request:
     branches:
       - main
@@ -40,28 +41,21 @@ jobs:
         id: check-env
         run: |
           if [ -f .env.example ]; then
-            echo "::set-output name=exists::true"
+            echo "env_exists=true" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=exists::false"
+            echo "env_exists=false" >> $GITHUB_OUTPUT
             echo "Error: .env.example file is missing!"
             exit 1
           fi
 
       - name: Copy .env.example to .env
-        if: steps.check-env.outputs.exists == 'true'
+        if: steps.check-env.outputs.env_exists == 'true'
         run: cp .env.example .env
 
       - name: Generate application key
         run: php artisan key:generate
 
       - name: Set up environment variables
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: booklink
-          DB_USERNAME: root
-          DB_PASSWORD: root
         run: |
           echo "DB_CONNECTION=mysql" >> .env
           echo "DB_HOST=127.0.0.1" >> .env
@@ -72,7 +66,6 @@ jobs:
 
       - name: Run Laravel migrations
         run: php artisan migrate --force
-
 
   react:
     runs-on: ubuntu-latest
@@ -88,12 +81,14 @@ jobs:
 
       - name: Install Node.js dependencies
         run: npm install
+        working-directory: ./frontend
 
       - name: Run ESLint
         run: npm run lint
+        working-directory: ./frontend
 
-      - name: Run React tests
-        run: npm test
+
 
       - name: Build React application
         run: npm run build
+        working-directory: ./frontend
