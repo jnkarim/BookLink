@@ -64,8 +64,6 @@ jobs:
           echo "DB_USERNAME=root" >> .env
           echo "DB_PASSWORD=root" >> .env
 
-      - name: Run Laravel migrations
-        run: php artisan migrate --force
 
   react:
     runs-on: ubuntu-latest
