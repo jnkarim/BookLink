@@ -36,7 +36,19 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
+      - name: Check if .env.example exists
+        id: check-env
+        run: |
+          if [ -f .env.example ]; then
+            echo "::set-output name=exists::true"
+          else
+            echo "::set-output name=exists::false"
+            echo "Error: .env.example file is missing!"
+            exit 1
+          fi
+
       - name: Copy .env.example to .env
+        if: steps.check-env.outputs.exists == 'true'
         run: cp .env.example .env
 
       - name: Generate application key
@@ -60,6 +72,7 @@ jobs:
 
       - name: Run Laravel migrations
         run: php artisan migrate --force
+
 
   react:
     runs-on: ubuntu-latest
