@@ -72,13 +72,7 @@ The platform is aimed at individuals looking for an affordable, sustainable, and
 - Deploy the web application to a hosting platform.
 - Conduct testing for performance, scalability, and security.
 
-## App Interface Previews
 
-### Preview 1
-![Screenshot 1](frontend/src/assets/pic1.png)
-
-### Preview 2
-![Screenshot 2](frontend/src/assets/pic2.png)
 
 ## 💬 Contact
 If you have any questions or suggestions, feel free to reach out!  
