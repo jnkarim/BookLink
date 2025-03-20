@@ -2,11 +2,11 @@
 
 ## 👥 Team Members
 
-| **Name**               | **Roll Number** | **Email**                         | **Role**              |
-|------------------------|-----------------|-----------------------------------|-----------------------|
-| Julker Nayeen Karim    | 20220104130     | julkernkarim@gmail.com           | Frontend, Backend     |
-| Md Nahid Hossain       | 20220104146     | nahidmax143@gmail.com             | Frontend              |
-| Md Yeas                | 20220104150     | yeashahmed23@gmail.com            | Lead                  |
+| **Name**               | **Roll Number** | **Email**                         | **Role**                 |
+|------------------------|-----------------|-----------------------------------|------------------------- |
+| Julker Nayeen Karim    | 20220104130     | julkernkarim@gmail.com            | Frontend, Backend, Lead  |
+| Md Nahid Hossain       | 20220104146     | nahidmax143@gmail.com             | Frontend                 |
+| Md Yeas                | 20220104150     | yeashahmed23@gmail.com            | Frontend, Backend        |                 |
 
 
 
@@ -72,6 +72,13 @@ The platform is aimed at individuals looking for an affordable, sustainable, and
 - Deploy the web application to a hosting platform.
 - Conduct testing for performance, scalability, and security.
 
+## App Interface Previews
+
+### Preview 1
+![Screenshot 1](frontend/src/assets/pic1.png)
+
+### Preview 2
+![Screenshot 2](frontend/src/assets/pic2.png)
 
 
 ## 💬 Contact
